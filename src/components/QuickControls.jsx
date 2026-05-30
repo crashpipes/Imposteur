@@ -3,7 +3,7 @@ import { useKeyboard } from '../hooks/useKeyboard.js'
 
 /**
  * Contrôles flottants accessibles dans toutes les phases :
- * changement de thème, son, musique. Discret, en haut à droite.
+ * changement de thème et activation/coupure du son. Discret, en haut à droite.
  */
 const THEMES = ['nebula', 'inferno', 'matrix', 'vapor']
 const THEME_DOT = {
@@ -48,13 +48,6 @@ export default function QuickControls() {
         className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-surface-soft/70 text-lg backdrop-blur transition hover:scale-110"
       >
         {settings.sound ? '🔊' : '🔇'}
-      </button>
-      <button
-        onClick={() => toggle('music')}
-        title="Musique d'ambiance"
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-surface-soft/70 text-lg backdrop-blur transition hover:scale-110"
-      >
-        {settings.music ? '🎵' : '🎶'}
       </button>
     </div>
   )

@@ -193,11 +193,9 @@ export default function SetupScreen() {
         <SectionTitle icon="⚙️" title="Options" />
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <Toggle label="⏱️ Timer" desc="Minuteur de discussion" value={settings.timer} onChange={() => flip('timer')} />
-          <Toggle label="🎵 Musique" desc="Nappe d'ambiance" value={settings.music} onChange={() => flip('music')} />
           <Toggle label="✨ Animations" desc="Effets & transitions" value={settings.animations} onChange={() => flip('animations')} />
-          <Toggle label="🎭 Mode dramatique" desc="Faux chargements & suspense" value={settings.dramatic} onChange={() => flip('dramatic')} />
+          <Toggle label="🕵️ Mode Mr. White" desc="L'imposteur n'a aucun mot" value={config.mrWhite} onChange={() => flipConfig('mrWhite')} />
           <Toggle label="🔥 Mode hardcore" desc="Mots très proches" value={config.hardcore} onChange={() => flipConfig('hardcore')} />
-          <Toggle label="⚡ Mode rapide" desc="Saute l'écran d'ambiance" value={config.quick} onChange={() => flipConfig('quick')} />
         </div>
       </GlowCard>
 

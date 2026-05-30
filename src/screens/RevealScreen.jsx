@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGame } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
@@ -9,12 +9,11 @@ import NeonButton from '../components/ui/NeonButton.jsx'
 export default function RevealScreen() {
   const { state, dispatch } = useGame()
   const play = usePlay()
-  const { round, revealed, settings } = state
+  const { round, revealed } = state
 
   // État du modal lifté ici pour pouvoir le piloter aussi au clavier.
   const [active, setActive] = useState(null) // index du joueur dont la carte est ouverte
-  const [stage, setStage] = useState('back') // eyes | back | loading | front
-  const loadingTimer = useRef(null)
+  const [stage, setStage] = useState('back') // back | front
 
   if (!round) return null
 
@@ -22,32 +21,23 @@ export default function RevealScreen() {
   const category = CATEGORIES[round.category]
   const firstUnrevealed = () => round.roles.findIndex((_, i) => !revealed.includes(i))
 
-  // Ouverture "souris" : on respecte le suspense (yeux fermés / face cachée).
+  // Ouverture "souris" : carte face cachée, puis on la retourne.
   const openCard = (i) => {
     play('flip')
     setActive(i)
-    setStage(settings.dramatic ? 'eyes' : 'back')
+    setStage('back')
   }
 
-  // Retourne la carte face cachée -> face visible (avec faux chargement si dramatique).
+  // Retourne la carte face cachée -> face visible.
   const doReveal = () => {
     play('flip')
-    if (settings.dramatic) {
-      setStage('loading')
-      loadingTimer.current = setTimeout(() => {
-        setStage('front')
-        play('normal') // son NEUTRE, identique pour tous les rôles
-      }, 1400)
-    } else {
-      setStage('front')
-      play('normal')
-    }
+    setStage('front')
+    play('normal') // son NEUTRE, identique pour tous les rôles
   }
 
   // Masque la carte et marque le joueur comme vu.
   const closeActive = () => {
     if (active === null) return
-    clearTimeout(loadingTimer.current)
     dispatch({ type: 'MARK_REVEALED', index: active })
     setActive(null)
     setStage('back')
@@ -71,8 +61,7 @@ export default function RevealScreen() {
   const onSpace = () => {
     if (active !== null) {
       if (stage === 'front') closeActive() // masquer
-      else if (stage === 'back' || stage === 'eyes') doReveal() // montrer
-      // 'loading' : on ignore
+      else doReveal() // montrer
       return
     }
     if (firstUnrevealed() !== -1) showNext() // montrer le suivant
@@ -172,7 +161,6 @@ export default function RevealScreen() {
           <RoleModal
             role={round.roles[active]}
             stage={stage}
-            onReady={() => setStage('back')}
             onReveal={doReveal}
             onClose={closeActive}
           />
@@ -187,13 +175,17 @@ export default function RevealScreen() {
  *
  * IMPORTANT : la carte est VOLONTAIREMENT identique pour l'imposteur et les
  * joueurs (même couleur, même icône, même son, aucun label de rôle). On ne
- * montre QUE le mot + son univers. L'imposteur ne sait pas qu'il l'est : il
- * doit le déduire en constatant que son mot diffère pendant la discussion.
+ * montre QUE le mot + son univers.
  *
- * Étapes : 'eyes' (mode dramatique) -> 'back' (carte face cachée)
- *          -> 'loading' (faux chargement) -> 'front' (mot + œuvre)
+ * Exception assumée — le mode Mr. White : l'imposteur n'a aucun mot, donc sa
+ * carte affiche « Mr. White ». C'est le principe du mode : il sait qu'il est
+ * l'imposteur et doit deviner le mot commun en se fondant dans la masse.
+ *
+ * Étapes : 'back' (carte face cachée) -> 'front' (mot + œuvre, ou Mr. White).
  * ------------------------------------------------------------------------ */
-function RoleModal({ role, stage, onReady, onReveal, onClose }) {
+function RoleModal({ role, stage, onReveal, onClose }) {
+  const isMrWhite = !role.word
+
   return (
     <motion.div
       className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-6 backdrop-blur-md"
@@ -203,28 +195,6 @@ function RoleModal({ role, stage, onReady, onReveal, onClose }) {
       exit={{ opacity: 0 }}
     >
       <AnimatePresence mode="wait">
-        {/* « Tout le monde ferme les yeux » */}
-        {stage === 'eyes' && (
-          <motion.div
-            key="eyes"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="text-center"
-          >
-            <div className="mb-6 text-7xl">🙈</div>
-            <h3 className="mb-2 font-display text-3xl font-bold neon-text">
-              Tout le monde ferme les yeux
-            </h3>
-            <p className="mb-8 text-ink-soft">
-              {role.name}, prépare-toi. Quand les autres ne regardent plus…
-            </p>
-            <NeonButton size="lg" onClick={onReady}>
-              Je suis prêt
-            </NeonButton>
-          </motion.div>
-        )}
-
         {/* Carte face cachée */}
         {stage === 'back' && (
           <motion.button
@@ -250,25 +220,7 @@ function RoleModal({ role, stage, onReady, onReveal, onClose }) {
           </motion.button>
         )}
 
-        {/* Faux chargement dramatique */}
-        {stage === 'loading' && (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="text-center"
-          >
-            <motion.div
-              className="mx-auto mb-6 h-16 w-16 rounded-full border-4 border-white/15 border-t-neon-primary"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-            />
-            <p className="font-display text-xl text-ink-soft">Distribution du mot…</p>
-          </motion.div>
-        )}
-
-        {/* Face révélée : UNIQUEMENT le mot + son œuvre (aucun indice de rôle) */}
+        {/* Face révélée : le mot + son œuvre, OU la carte Mr. White */}
         {stage === 'front' && (
           <motion.div
             key="front"
@@ -279,34 +231,53 @@ function RoleModal({ role, stage, onReady, onReveal, onClose }) {
             className="flex h-[28rem] w-80 transform-gpu flex-col items-center justify-center rounded-[2rem] border border-neon-primary/50 bg-gradient-to-br from-surface-soft to-surface p-8 text-center shadow-glow [backface-visibility:hidden]"
           >
             <div className="text-sm uppercase tracking-[0.3em] text-ink-soft">{role.name}</div>
-            <div className="my-5 text-6xl">🃏</div>
-            <p className="mb-1 text-sm text-ink-soft">Ton mot est</p>
-            <motion.div
-              initial={{ scale: 0.6, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 260 }}
-              className="font-display text-4xl font-bold neon-text"
-            >
-              {role.word}
-            </motion.div>
 
-            {/* Œuvre d'origine : aide à lever l'ambiguïté entre homonymes */}
-            {role.origin && (
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-ink-soft"
-              >
-                <span className="opacity-70">📚 Univers :</span>
-                <span className="font-medium text-ink">{role.origin}</span>
-              </motion.div>
+            {isMrWhite ? (
+              /* ---- Carte Mr. White : aucun mot ---- */
+              <>
+                <div className="my-5 text-6xl">🕵️</div>
+                <div className="mb-2 font-display text-4xl font-bold text-rose-400">
+                  Mr. White
+                </div>
+                <p className="text-sm text-ink-soft">Tu n'as aucun mot.</p>
+                <p className="mt-3 max-w-[15rem] text-xs text-ink-soft/80">
+                  Écoute les autres, devine le mot commun et fonds-toi dans la masse.
+                  Surtout, ne te fais pas griller !
+                </p>
+              </>
+            ) : (
+              /* ---- Carte joueur : mot + univers ---- */
+              <>
+                <div className="my-5 text-6xl">🃏</div>
+                <p className="mb-1 text-sm text-ink-soft">Ton mot est</p>
+                <motion.div
+                  initial={{ scale: 0.6, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.2, type: 'spring', stiffness: 260 }}
+                  className="font-display text-4xl font-bold neon-text"
+                >
+                  {role.word}
+                </motion.div>
+
+                {/* Œuvre d'origine : lève l'ambiguïté entre homonymes */}
+                {role.origin && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-ink-soft"
+                  >
+                    <span className="opacity-70">📚 Univers :</span>
+                    <span className="font-medium text-ink">{role.origin}</span>
+                  </motion.div>
+                )}
+
+                <p className="mt-5 max-w-[15rem] text-xs text-ink-soft/80">
+                  Mémorise ton mot. Reste discret : personne ne doit savoir si tu es
+                  l'imposteur.
+                </p>
+              </>
             )}
-
-            <p className="mt-5 max-w-[15rem] text-xs text-ink-soft/80">
-              Mémorise ton mot. Reste discret : personne ne doit savoir si tu es
-              l'imposteur.
-            </p>
 
             <NeonButton size="lg" variant="secondary" className="mt-6 w-full" onClick={onClose}>
               🙈 Masquer (Espace)

@@ -121,7 +121,7 @@ export default function HomeScreen() {
                       })}
                     </span>
                     <span className="font-medium">
-                      {h.mainWord} <span className="text-ink-soft">vs</span> {h.impostorWord}
+                      {h.mainWord} <span className="text-ink-soft">vs</span> {h.impostorWord || 'Mr. White'}
                     </span>
                     <span
                       className={

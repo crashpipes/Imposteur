@@ -12,11 +12,9 @@ const HISTORY_KEY = 'imposteur:history'
 export const defaultSettings = {
   theme: 'nebula',
   sound: true,
-  music: false,
   animations: true,
   timer: true,
   timerSeconds: 180,
-  dramatic: false, // mode dramatique : faux chargements + suspense renforcé
 }
 
 export function loadSettings() {

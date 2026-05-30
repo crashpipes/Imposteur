@@ -7,8 +7,8 @@ import { useSound } from './useSound.js'
 
 const SoundContext = createContext({ play: () => {} })
 
-export function SoundProvider({ enabled, music, children }) {
-  const { play } = useSound(enabled, music)
+export function SoundProvider({ enabled, children }) {
+  const { play } = useSound(enabled)
   return <SoundContext.Provider value={{ play }}>{children}</SoundContext.Provider>
 }
 

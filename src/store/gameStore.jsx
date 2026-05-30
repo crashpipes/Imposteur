@@ -26,8 +26,8 @@ const initialConfig = {
   impostorCount: 1,
   categories: ['mix'],
   hardcore: false,
-  quick: false, // mode rapide : saute les écrans d'ambiance
   tours: 2, // nombre de tours de parole avant le vote
+  mrWhite: false, // mode Mr. White : l'imposteur n'a aucun mot
 }
 
 function init() {
@@ -62,6 +62,7 @@ function reducer(state, action) {
         impostorCount: state.config.impostorCount,
         categories: state.config.categories,
         hardcore: state.config.hardcore,
+        mrWhite: state.config.mrWhite,
       })
       return { ...state, round, revealed: [], eliminated: [], result: null, phase: 'reveal' }
     }

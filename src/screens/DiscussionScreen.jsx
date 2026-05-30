@@ -19,7 +19,17 @@ export default function DiscussionScreen() {
   // Ordre de parole RANDOMISÉ, tiré une seule fois par partie (au montage de
   // l'écran). Ainsi ce n'est pas toujours le même joueur qui commence, mais
   // l'ordre reste stable d'un tour à l'autre pendant toute la discussion.
-  const [order] = useState(() => (round ? shuffle(round.roles.map((_, i) => i)) : []))
+  const [order] = useState(() => {
+    if (!round) return []
+    const ord = shuffle(round.roles.map((_, i) => i))
+    // En mode Mr. White, l'imposteur ne doit JAMAIS commencer à parler
+    // (sinon, sans aucun mot, c'est trop dur) : on place un joueur normal en 1er.
+    if (round.mrWhite && round.roles[ord[0]].isImpostor) {
+      const swap = ord.findIndex((idx) => !round.roles[idx].isImpostor)
+      if (swap > 0) [ord[0], ord[swap]] = [ord[swap], ord[0]]
+    }
+    return ord
+  })
 
   if (!round) return null
 

@@ -73,11 +73,13 @@ export default function ResultScreen() {
           <div className="rounded-2xl bg-rose-500/10 p-4">
             <div className="text-xs uppercase tracking-widest text-ink-soft">Mot imposteur</div>
             <div className="mt-1 font-display text-2xl font-bold text-rose-400">
-              {result.impostorWord}
+              {result.impostorWord || 'Mr. White 🕵️'}
             </div>
-            {result.impostorFrom && (
+            {result.impostorFrom ? (
               <div className="mt-1 text-xs text-ink-soft">📚 {result.impostorFrom}</div>
-            )}
+            ) : !result.impostorWord ? (
+              <div className="mt-1 text-xs text-ink-soft">aucun mot</div>
+            ) : null}
           </div>
         </div>
       </GlowCard>
@@ -101,7 +103,7 @@ export default function ResultScreen() {
               <span
                 className={`text-right text-sm ${role.isImpostor ? 'text-rose-400' : 'text-emerald-400'}`}
               >
-                {role.isImpostor ? 'Imposteur' : 'Joueur'} · {role.word}
+                {role.isImpostor ? 'Imposteur' : 'Joueur'} · {role.word || 'Mr. White'}
                 {role.origin && (
                   <span className="block text-xs text-ink-soft">{role.origin}</span>
                 )}

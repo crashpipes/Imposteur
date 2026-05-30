@@ -35,10 +35,10 @@ npm run preview  # prévisualiser le build
 
 ## Options & bonus
 
-Sons synthétisés (Web Audio, aucun fichier), musique d'ambiance, 4 thèmes néon
-(🟣 nebula, 🟠 inferno, 🟢 matrix, 🩷 vapor), **mode dramatique** (faux chargements +
-« tout le monde ferme les yeux »), **mode hardcore** (mots très proches),
-**mode rapide**, historique local, et raccourcis clavier.
+Sons synthétisés (Web Audio, aucun fichier), 4 thèmes néon
+(🟣 nebula, 🟠 inferno, 🟢 matrix, 🩷 vapor), **mode Mr. White** (l'imposteur n'a
+aucun mot et ne commence jamais à parler), **mode hardcore** (mots très proches),
+historique local, ordre de parole aléatoire, et raccourcis clavier.
 
 | Touche | Action |
 |--------|--------|

@@ -4,6 +4,7 @@
  * Sépare totalement la logique de jeu de l'UI.
  *   - choisit une paire de mots cohérente selon les catégories
  *   - en mode hardcore, privilégie les paires très proches
+ *   - en mode Mr. White, l'imposteur n'a aucun mot
  *   - répartit les rôles (imposteurs vs joueurs normaux)
  *   - attache l'œuvre d'origine (origin) à chaque rôle pour l'affichage
  * ----------------------------------------------------------------------------
@@ -38,14 +39,15 @@ function pickPair(categoryIds, hardcore) {
  * @param {number}   opts.impostorCount- nombre d'imposteurs
  * @param {string[]} opts.categories   - catégories choisies
  * @param {boolean}  opts.hardcore     - mode mots très proches
+ * @param {boolean}  opts.mrWhite      - mode Mr. White (imposteur sans mot)
  * @returns {{
  *   mainWord: string, mainFrom?: string,
- *   impostorWord: string, impostorFrom?: string,
+ *   impostorWord: string|null, impostorFrom?: string|null, mrWhite: boolean,
  *   category: string,
- *   roles: Array<{ name: string, isImpostor: boolean, word: string, origin?: string }>
+ *   roles: Array<{ name: string, isImpostor: boolean, word: string|null, origin?: string|null }>
  * }}
  */
-export function generateRound({ players, impostorCount = 1, categories = [], hardcore = false }) {
+export function generateRound({ players, impostorCount = 1, categories = [], hardcore = false, mrWhite = false }) {
   const clean = players.map((p) => p.trim()).filter(Boolean)
   if (clean.length < 3) {
     throw new Error('Il faut au moins 3 joueurs.')
@@ -57,8 +59,9 @@ export function generateRound({ players, impostorCount = 1, categories = [], har
   const flip = Math.random() < 0.5
   const mainWord = flip ? pair.a : pair.b
   const mainFrom = flip ? pair.aFrom : pair.bFrom
-  const impostorWord = flip ? pair.b : pair.a
-  const impostorFrom = flip ? pair.bFrom : pair.aFrom
+  // En mode Mr. White, l'imposteur n'a AUCUN mot (ni univers) : il doit deviner.
+  const impostorWord = mrWhite ? null : flip ? pair.b : pair.a
+  const impostorFrom = mrWhite ? null : flip ? pair.bFrom : pair.aFrom
 
   // On borne le nombre d'imposteurs : au moins 1, et on laisse toujours
   // une majorité de joueurs normaux.
@@ -84,6 +87,7 @@ export function generateRound({ players, impostorCount = 1, categories = [], har
     mainFrom,
     impostorWord,
     impostorFrom,
+    mrWhite,
     category: pair.category,
     roles,
   }

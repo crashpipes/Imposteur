@@ -34,7 +34,7 @@ export default function App() {
   const Screen = SCREENS[phase] ?? HomeScreen
 
   return (
-    <SoundProvider enabled={settings.sound} music={settings.music}>
+    <SoundProvider enabled={settings.sound}>
       <Background animations={settings.animations} />
       <QuickControls />
 
