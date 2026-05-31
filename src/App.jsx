@@ -5,6 +5,7 @@ import Background from './components/ui/Background.jsx'
 import QuickControls from './components/QuickControls.jsx'
 
 import HomeScreen from './screens/HomeScreen.jsx'
+import LibraryScreen from './screens/LibraryScreen.jsx'
 import SetupScreen from './screens/SetupScreen.jsx'
 import RevealScreen from './screens/RevealScreen.jsx'
 import DiscussionScreen from './screens/DiscussionScreen.jsx'
@@ -13,6 +14,7 @@ import ResultScreen from './screens/ResultScreen.jsx'
 
 const SCREENS = {
   home: HomeScreen,
+  library: LibraryScreen,
   setup: SetupScreen,
   reveal: RevealScreen,
   discussion: DiscussionScreen,

@@ -16,6 +16,10 @@ export default function HomeScreen() {
     play('flip')
     dispatch({ type: 'SET_PHASE', phase: 'setup' })
   }
+  const openLibrary = () => {
+    play('click')
+    dispatch({ type: 'SET_PHASE', phase: 'library' })
+  }
 
   useKeyboard({ Enter: start })
 
@@ -59,12 +63,17 @@ export default function HomeScreen() {
         <NeonButton size="xl" onClick={start} onMouseEnter={() => play('hover')}>
           ▶ Créer une partie
         </NeonButton>
-        <button
-          onClick={() => { play('click'); setShowHistory((s) => !s) }}
-          className="text-sm text-ink-soft underline-offset-4 transition hover:text-ink hover:underline"
-        >
-          {showHistory ? 'Masquer l\'historique' : `Historique des parties (${state.history.length})`}
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <NeonButton size="sm" variant="secondary" onClick={openLibrary}>
+            📚 Voir toutes les cartes
+          </NeonButton>
+          <button
+            onClick={() => { play('click'); setShowHistory((s) => !s) }}
+            className="text-sm text-ink-soft underline-offset-4 transition hover:text-ink hover:underline"
+          >
+            {showHistory ? 'Masquer l\'historique' : `Historique (${state.history.length})`}
+          </button>
+        </div>
       </motion.div>
 
       {/* Mini galerie de catégories */}
