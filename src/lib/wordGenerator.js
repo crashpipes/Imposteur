@@ -3,10 +3,13 @@
  * ----------------------------------------------------------------------------
  * Sépare totalement la logique de jeu de l'UI.
  *   - choisit une paire de mots cohérente selon les catégories
- *   - en mode hardcore, privilégie les paires très proches
  *   - en mode Mr. White, l'imposteur n'a aucun mot
  *   - répartit les rôles (imposteurs vs joueurs normaux)
  *   - attache l'œuvre d'origine (origin) à chaque rôle pour l'affichage
+ *
+ * Note : le champ `hardcore` des paires existe toujours dans la base (il sert
+ * d'indicateur « duo très proche » dans la bibliothèque), mais il n'influence
+ * plus le tirage — toutes les cartes sont mélangées de la même façon.
  * ----------------------------------------------------------------------------
  */
 
@@ -22,13 +25,8 @@ export function shuffle(arr) {
   return a
 }
 
-function pickPair(categoryIds, hardcore) {
-  let pool = poolForCategories(categoryIds)
-  // En hardcore on ne garde que les paires les plus subtiles (si possible).
-  if (hardcore) {
-    const subtle = pool.filter((p) => p.hardcore)
-    if (subtle.length > 0) pool = subtle
-  }
+function pickPair(categoryIds) {
+  const pool = poolForCategories(categoryIds)
   return pool[Math.floor(Math.random() * pool.length)]
 }
 
@@ -38,7 +36,6 @@ function pickPair(categoryIds, hardcore) {
  * @param {string[]} opts.players      - noms des joueurs
  * @param {number}   opts.impostorCount- nombre d'imposteurs
  * @param {string[]} opts.categories   - catégories choisies
- * @param {boolean}  opts.hardcore     - mode mots très proches
  * @param {boolean}  opts.mrWhite      - mode Mr. White (imposteur sans mot)
  * @returns {{
  *   mainWord: string, mainFrom?: string,
@@ -47,13 +44,13 @@ function pickPair(categoryIds, hardcore) {
  *   roles: Array<{ name: string, isImpostor: boolean, word: string|null, origin?: string|null }>
  * }}
  */
-export function generateRound({ players, impostorCount = 1, categories = [], hardcore = false, mrWhite = false }) {
+export function generateRound({ players, impostorCount = 1, categories = [], mrWhite = false }) {
   const clean = players.map((p) => p.trim()).filter(Boolean)
   if (clean.length < 3) {
     throw new Error('Il faut au moins 3 joueurs.')
   }
 
-  const pair = pickPair(categories, hardcore)
+  const pair = pickPair(categories)
 
   // On décide aléatoirement quel mot de la paire est le mot principal.
   const flip = Math.random() < 0.5

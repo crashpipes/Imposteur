@@ -41,8 +41,8 @@ basés sur la ressemblance ou le comportement (pas seulement le même univers) e
 plusieurs duos possibles par personnage (Luffy / Zoro, Luffy / Shanks…).
 Sons synthétisés (Web Audio, aucun fichier), 4 thèmes néon
 (🟣 nebula, 🟠 inferno, 🟢 matrix, 🩷 vapor), **mode Mr. White** (l'imposteur n'a
-aucun mot et ne commence jamais à parler), **mode hardcore** (mots très proches),
-historique local, ordre de parole aléatoire, et raccourcis clavier.
+aucun mot et ne commence jamais à parler), bouton « Autre carte » pour retirer un
+duo déjà joué, historique local, ordre de parole aléatoire, et raccourcis clavier.
 
 | Touche | Action |
 |--------|--------|

@@ -25,7 +25,6 @@ const initialConfig = {
   players: ['', '', '', ''],
   impostorCount: 1,
   categories: ['mix'],
-  hardcore: false,
   tours: 2, // nombre de tours de parole avant le vote
   mrWhite: false, // mode Mr. White : l'imposteur n'a aucun mot
 }
@@ -61,7 +60,6 @@ function reducer(state, action) {
         players: state.config.players,
         impostorCount: state.config.impostorCount,
         categories: state.config.categories,
-        hardcore: state.config.hardcore,
         mrWhite: state.config.mrWhite,
       })
       return { ...state, round, revealed: [], eliminated: [], result: null, phase: 'reveal' }

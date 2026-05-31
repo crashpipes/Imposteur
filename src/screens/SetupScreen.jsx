@@ -195,7 +195,6 @@ export default function SetupScreen() {
           <Toggle label="⏱️ Timer" desc="Minuteur de discussion" value={settings.timer} onChange={() => flip('timer')} />
           <Toggle label="✨ Animations" desc="Effets & transitions" value={settings.animations} onChange={() => flip('animations')} />
           <Toggle label="🕵️ Mode Mr. White" desc="L'imposteur n'a aucun mot" value={config.mrWhite} onChange={() => flipConfig('mrWhite')} />
-          <Toggle label="🔥 Mode hardcore" desc="Mots très proches" value={config.hardcore} onChange={() => flipConfig('hardcore')} />
         </div>
       </GlowCard>
 

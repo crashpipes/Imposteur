@@ -52,6 +52,15 @@ export default function RevealScreen() {
     play('normal')
   }
 
+  // Relance une nouvelle manche (nouveau duo) sans changer les joueurs/réglages.
+  // Pratique si le duo tiré a déjà été joué. Remet la distribution à zéro.
+  const regenerate = () => {
+    play('flip')
+    setActive(null)
+    setStage('back')
+    dispatch({ type: 'START_ROUND' })
+  }
+
   const goDiscussion = () => {
     play('reveal')
     dispatch({ type: 'GOTO', phase: 'discussion' })
@@ -80,6 +89,19 @@ export default function RevealScreen() {
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-12">
+      {/* Barre du haut : changer de carte si le duo a déjà été joué */}
+      <div className="mb-4 flex items-center justify-between">
+        <button
+          onClick={() => { play('click'); dispatch({ type: 'NEW_GAME' }) }}
+          className="text-sm text-ink-soft transition hover:text-ink"
+        >
+          ← Accueil
+        </button>
+        <NeonButton size="sm" variant="secondary" onClick={regenerate}>
+          🔄 Autre carte
+        </NeonButton>
+      </div>
+
       <div className="mb-2 text-center text-sm uppercase tracking-[0.4em] text-ink-soft">
         Distribution des rôles
       </div>
@@ -88,7 +110,7 @@ export default function RevealScreen() {
       </h2>
       <p className="mx-auto mb-6 max-w-lg text-center text-ink-soft">
         L'hôte tend l'écran à chaque joueur. Montrez la carte, puis masquez avant
-        de passer au suivant.
+        de passer au suivant. Déjà joué ce duo ? Tapez « 🔄 Autre carte ».
       </p>
 
       {/* Aide clavier */}

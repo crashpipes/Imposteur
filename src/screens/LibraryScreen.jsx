@@ -112,7 +112,7 @@ export default function LibraryScreen() {
                   </span>
                   {p.hardcore && (
                     <span className="rounded-full bg-rose-500/15 px-2 py-0.5 text-[10px] font-semibold text-rose-300">
-                      🔥 hardcore
+                      🔥 très proche
                     </span>
                   )}
                 </div>
