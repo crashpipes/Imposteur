@@ -47,6 +47,7 @@ export const WORD_DATA = {
     { a: 'Naruto', aFrom: 'Naruto', b: 'Sasuke', bFrom: 'Naruto', hardcore: true },
     { a: 'Luffy', aFrom: 'One Piece', b: 'Zoro', bFrom: 'One Piece' },
     { a: 'Luffy', aFrom: 'One Piece', b: 'Shanks', bFrom: 'One Piece', link: 'Idole et disciple' },
+    { a: 'Barbe noire', aFrom: 'One Piece', b: 'Barbe blanche', bFrom: 'One Piece', link: 'Opposés' },
     { a: 'Luffy', aFrom: 'One Piece', b: 'Ace', bFrom: 'One Piece', link: 'Frères' },
     { a: 'Goku', aFrom: 'Dragon Ball', b: 'Vegeta', bFrom: 'Dragon Ball', hardcore: true },
     { a: 'Goku', aFrom: 'Dragon Ball', b: 'Gohan', bFrom: 'Dragon Ball', link: 'Père et fils' },
@@ -54,6 +55,7 @@ export const WORD_DATA = {
     { a: 'Itachi', aFrom: 'Naruto', b: 'Shisui', bFrom: 'Naruto', hardcore: true },
     { a: 'Itachi', aFrom: 'Naruto', b: 'Sasuke', bFrom: 'Naruto', link: 'Frères Uchiha' },
     { a: 'Naruto', aFrom: 'Naruto', b: 'Jiraiya', bFrom: 'Naruto', link: 'Élève et maître' },
+    { a: 'Obito', aFrom: 'Naruto', b: 'Tobi', bFrom: 'Naruto', link: 'Le même' },
     { a: 'Ichigo', aFrom: 'Bleach', b: 'Renji', bFrom: 'Bleach' },
     { a: 'Eren', aFrom: "L'Attaque des Titans", b: 'Armin', bFrom: "L'Attaque des Titans" },
     { a: 'Levi', aFrom: "L'Attaque des Titans", b: 'Mikasa', bFrom: "L'Attaque des Titans" },
@@ -84,6 +86,7 @@ export const WORD_DATA = {
     { a: 'Tanjiro', aFrom: 'Demon Slayer', b: 'Yuji', bFrom: 'Jujutsu Kaisen', link: 'Héros au grand cœur' },
     { a: 'Gon', aFrom: 'Hunter x Hunter', b: 'Luffy', bFrom: 'One Piece', link: 'Aventuriers naïfs et joyeux' },
     { a: 'Eren', aFrom: "L'Attaque des Titans", b: 'Light', bFrom: 'Death Note', link: 'Descente vers les ténèbres' },
+    { a: 'Imu', aFrom: 'One Piece', b: 'Le diable', bFrom: 'Ténèbres', link: 'Deux diables' },
 
     // --- Cross-univers : RESSEMBLANCE PHYSIQUE ---
     { a: 'Gojo', aFrom: 'Jujutsu Kaisen', b: 'Kakashi', bFrom: 'Naruto', link: 'Sensei aux cheveux clairs et œil spécial' },
@@ -91,6 +94,8 @@ export const WORD_DATA = {
     { a: 'Zoro', aFrom: 'One Piece', b: 'Levi', bFrom: "L'Attaque des Titans", link: 'Bretteurs stoïques et froids' },
     { a: 'Lelouch', aFrom: 'Code Geass', b: 'Light', bFrom: 'Death Note', link: 'Se ressemblent physiquement', hardcore: true },
     { a: 'Sakura', aFrom: 'Naruto', b: 'Asuna', bFrom: 'Sword Art Online', link: 'Héroïnes au sale caractère' },
+    { a: 'Jinbe', aFrom: 'One Piece', b: 'Kisame', bFrom: 'Naruto', link: "Ressemblance physique"},
+    { a: 'Orochimaru', aFrom: 'Naruto', b: 'Voldemort', bFrom: 'Harry Potter', link: 'Antagonistes ressemblants'},
   ],
 
   films: [
@@ -155,6 +160,7 @@ export const WORD_DATA = {
     { a: 'Steve', aFrom: 'Minecraft', b: 'Alex', bFrom: 'Minecraft', hardcore: true },
     { a: 'Creeper', aFrom: 'Minecraft', b: 'Enderman', bFrom: 'Minecraft' },
     { a: 'Pikachu', aFrom: 'Pokémon', b: 'Évoli', bFrom: 'Pokémon' },
+    { a: 'Chenipan', aFrom: 'Pokémon', b: 'Aspicot', bFrom: 'Pokémon' },
     { a: 'Mewtwo', aFrom: 'Pokémon', b: 'Mew', bFrom: 'Pokémon', hardcore: true },
     { a: 'Ryu', aFrom: 'Street Fighter', b: 'Ken', bFrom: 'Street Fighter', hardcore: true },
     { a: 'Scorpion', aFrom: 'Mortal Kombat', b: 'Sub-Zero', bFrom: 'Mortal Kombat' },
