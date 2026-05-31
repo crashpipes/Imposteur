@@ -36,9 +36,11 @@ npm run preview  # prévisualiser le build
 ## Options & bonus
 
 Bibliothèque de cartes consultable depuis l'accueil (recherche + filtre par
-catégorie), 9 catégories dont **Pays, Objets, Nourriture et Animaux**, des duos
-basés sur la ressemblance ou le comportement (pas seulement le même univers) et
-plusieurs duos possibles par personnage (Luffy / Zoro, Luffy / Shanks…).
+catégorie), 10 catégories dont **Pokémon, Pays, Objets, Nourriture et Animaux**,
+des duos basés sur la ressemblance ou le comportement (pas seulement le même
+univers) et plusieurs duos possibles par personnage (Luffy / Zoro, Luffy / Shanks…).
+Depuis la bibliothèque, on peut aussi **créer ses propres cartes** (protégé par
+mot de passe ; elles sont stockées dans le navigateur et entrent dans le jeu).
 Sons synthétisés (Web Audio, aucun fichier), 4 thèmes néon
 (🟣 nebula, 🟠 inferno, 🟢 matrix, 🩷 vapor), **mode Mr. White** (l'imposteur n'a
 aucun mot et ne commence jamais à parler), bouton « Autre carte » pour retirer un

@@ -22,9 +22,11 @@ export default function ResultScreen() {
     play('flip')
     dispatch({ type: 'START_ROUND' }) // relance immédiatement avec les mêmes réglages
   }
+  // « Nouvelle partie » -> retour au LOBBY DE CONFIG (joueurs/réglages conservés),
+  // pas au menu d'accueil.
   const newGame = () => {
     play('click')
-    dispatch({ type: 'NEW_GAME' })
+    dispatch({ type: 'REPLAY' })
   }
 
   useKeyboard({ Enter: replay, Escape: newGame })
@@ -116,12 +118,12 @@ export default function ResultScreen() {
           🔄 Rejouer (même équipe)
         </NeonButton>
         <NeonButton size="lg" variant="secondary" onClick={newGame}>
-          🏠 Nouvelle partie
+          ⚙️ Nouvelle partie
         </NeonButton>
       </div>
       <p className="mt-4 text-center text-xs text-ink-soft/70">
         <kbd className="rounded bg-white/10 px-1.5 py-0.5">Entrée</kbd> rejouer ·{' '}
-        <kbd className="rounded bg-white/10 px-1.5 py-0.5">Échap</kbd> accueil
+        <kbd className="rounded bg-white/10 px-1.5 py-0.5">Échap</kbd> nouvelle partie
       </p>
     </div>
   )

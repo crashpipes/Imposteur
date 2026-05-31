@@ -19,14 +19,18 @@
  *                  mot lors de la distribution (optionnel, surtout fiction).
  *   link        -> nature du lien, affichée dans la BIBLIOTHÈQUE uniquement
  *                  (jamais pendant la partie). Optionnel.
- *   hardcore    -> true si la différence est très subtile (mode hardcore)
+ *   hardcore    -> true si la différence est très subtile (indicateur biblio).
  *
  * Un même personnage peut apparaître dans PLUSIEURS paires (ex. Luffy / Zoro,
  * Luffy / Shanks, Naruto / Luffy...). C'est voulu : plus de variété.
  *
  * POUR ÉTENDRE : ajoutez un objet { a, b, ... } dans la bonne catégorie.
+ * (On peut aussi créer des cartes depuis la bibliothèque dans l'app : elles
+ *  sont stockées dans le navigateur et fusionnées automatiquement ici.)
  * ----------------------------------------------------------------------------
  */
+
+import { loadCustomPairs } from '../lib/storage.js'
 
 export const CATEGORIES = {
   films: { id: 'films', label: 'Films', icon: '🎬' },
@@ -34,6 +38,7 @@ export const CATEGORIES = {
   anime: { id: 'anime', label: 'Anime', icon: '🍥' },
   jeux: { id: 'jeux', label: 'Jeux vidéo', icon: '🎮' },
   personnages: { id: 'personnages', label: 'Personnages fictifs', icon: '🦸' },
+  pokemon: { id: 'pokemon', label: 'Pokémon', icon: '⚡' },
   pays: { id: 'pays', label: 'Pays', icon: '🌍' },
   objets: { id: 'objets', label: 'Objets', icon: '🧰' },
   nourriture: { id: 'nourriture', label: 'Nourriture', icon: '🍔' },
@@ -51,7 +56,6 @@ export const WORD_DATA = {
     { a: 'Luffy', aFrom: 'One Piece', b: 'Ace', bFrom: 'One Piece', link: 'Frères' },
     { a: 'Goku', aFrom: 'Dragon Ball', b: 'Vegeta', bFrom: 'Dragon Ball', hardcore: true },
     { a: 'Goku', aFrom: 'Dragon Ball', b: 'Gohan', bFrom: 'Dragon Ball', link: 'Père et fils' },
-    { a: 'Pikachu', aFrom: 'Pokémon', b: 'Raichu', bFrom: 'Pokémon', hardcore: true },
     { a: 'Itachi', aFrom: 'Naruto', b: 'Shisui', bFrom: 'Naruto', hardcore: true },
     { a: 'Itachi', aFrom: 'Naruto', b: 'Sasuke', bFrom: 'Naruto', link: 'Frères Uchiha' },
     { a: 'Naruto', aFrom: 'Naruto', b: 'Jiraiya', bFrom: 'Naruto', link: 'Élève et maître' },
@@ -94,8 +98,8 @@ export const WORD_DATA = {
     { a: 'Zoro', aFrom: 'One Piece', b: 'Levi', bFrom: "L'Attaque des Titans", link: 'Bretteurs stoïques et froids' },
     { a: 'Lelouch', aFrom: 'Code Geass', b: 'Light', bFrom: 'Death Note', link: 'Se ressemblent physiquement', hardcore: true },
     { a: 'Sakura', aFrom: 'Naruto', b: 'Asuna', bFrom: 'Sword Art Online', link: 'Héroïnes au sale caractère' },
-    { a: 'Jinbe', aFrom: 'One Piece', b: 'Kisame', bFrom: 'Naruto', link: "Ressemblance physique"},
-    { a: 'Orochimaru', aFrom: 'Naruto', b: 'Voldemort', bFrom: 'Harry Potter', link: 'Antagonistes ressemblants'},
+    { a: 'Jinbe', aFrom: 'One Piece', b: 'Kisame', bFrom: 'Naruto', link: 'Ressemblance physique' },
+    { a: 'Orochimaru', aFrom: 'Naruto', b: 'Voldemort', bFrom: 'Harry Potter', link: 'Antagonistes ressemblants' },
   ],
 
   films: [
@@ -159,9 +163,6 @@ export const WORD_DATA = {
     { a: 'Donkey Kong', aFrom: 'Donkey Kong (Nintendo)', b: 'Diddy Kong', bFrom: 'Donkey Kong (Nintendo)', hardcore: true },
     { a: 'Steve', aFrom: 'Minecraft', b: 'Alex', bFrom: 'Minecraft', hardcore: true },
     { a: 'Creeper', aFrom: 'Minecraft', b: 'Enderman', bFrom: 'Minecraft' },
-    { a: 'Pikachu', aFrom: 'Pokémon', b: 'Évoli', bFrom: 'Pokémon' },
-    { a: 'Chenipan', aFrom: 'Pokémon', b: 'Aspicot', bFrom: 'Pokémon' },
-    { a: 'Mewtwo', aFrom: 'Pokémon', b: 'Mew', bFrom: 'Pokémon', hardcore: true },
     { a: 'Ryu', aFrom: 'Street Fighter', b: 'Ken', bFrom: 'Street Fighter', hardcore: true },
     { a: 'Scorpion', aFrom: 'Mortal Kombat', b: 'Sub-Zero', bFrom: 'Mortal Kombat' },
     { a: 'Solid Snake', aFrom: 'Metal Gear', b: 'Big Boss', bFrom: 'Metal Gear', hardcore: true },
@@ -192,6 +193,55 @@ export const WORD_DATA = {
     { a: 'Aquaman', aFrom: 'DC Comics', b: 'Namor', bFrom: 'Marvel', hardcore: true, link: 'Rois des mers' },
     { a: 'Thanos', aFrom: 'Marvel', b: 'Darkseid', bFrom: 'DC Comics', hardcore: true, link: 'Tyrans cosmiques au menton ridé' },
     { a: 'Voldemort', aFrom: 'Harry Potter', b: 'Saroumane', bFrom: 'Le Seigneur des Anneaux', link: 'Mages maléfiques' },
+  ],
+
+  // ------------------------------------------------------------------
+  // POKÉMON : évolutions, ressemblances et légendaires.
+  // (Pas d'« univers » : tout vient de Pokémon. On se base sur la forme.)
+  // ------------------------------------------------------------------
+  pokemon: [
+    // Évolutions (très proches)
+    { a: 'Pichu', b: 'Pikachu', link: 'Bébé et évolution', hardcore: true },
+    { a: 'Pikachu', b: 'Raichu', link: 'Évolution', hardcore: true },
+    { a: 'Salamèche', b: 'Reptincel', link: 'Évolution', hardcore: true },
+    { a: 'Reptincel', b: 'Dracaufeu', link: 'Évolution' },
+    { a: 'Carapuce', b: 'Carabaffe', link: 'Évolution', hardcore: true },
+    { a: 'Bulbizarre', b: 'Herbizarre', link: 'Évolution', hardcore: true },
+    { a: 'Chenipan', b: 'Aspicot', link: 'Insectes du tout début', hardcore: true },
+    { a: 'Roucool', b: 'Roucoups', link: 'Évolution', hardcore: true },
+    { a: 'Rattata', b: 'Rattatac', link: 'Évolution', hardcore: true },
+    { a: 'Abra', b: 'Kadabra', link: 'Évolution', hardcore: true },
+    { a: 'Machoc', b: 'Machopeur', link: 'Évolution', hardcore: true },
+    { a: 'Racaillou', b: 'Gravalanch', link: 'Évolution', hardcore: true },
+    { a: 'Magnéti', b: 'Magnéton', link: 'Évolution', hardcore: true },
+    { a: 'Osselait', b: 'Ossatueur', link: 'Évolution', hardcore: true },
+    { a: 'Onix', b: 'Steelix', link: 'Évolution' },
+    { a: 'Magicarpe', b: 'Léviator', link: 'Évolution spectaculaire' },
+    { a: 'Minidraco', b: 'Draco', link: 'Évolution', hardcore: true },
+    { a: 'Draco', b: 'Dracolosse', link: 'Évolution' },
+    { a: 'Caninos', b: 'Arcanin', link: 'Évolution' },
+    { a: 'Goupix', b: 'Feunard', link: 'Évolution' },
+    { a: 'Sabelette', b: 'Sablaireau', link: 'Évolution', hardcore: true },
+    { a: 'Tentacool', b: 'Tentacruel', link: 'Évolution', hardcore: true },
+    { a: 'Stari', b: 'Staross', link: 'Évolution' },
+    { a: 'Doduo', b: 'Dodrio', link: 'Évolution', hardcore: true },
+    { a: 'Psykokwak', b: 'Akwakwak', link: 'Évolution', hardcore: true },
+    { a: 'Miaouss', b: 'Persian', link: 'Évolution' },
+    { a: 'Évoli', b: 'Aquali', link: 'Évolution' },
+    { a: 'Léveinard', b: 'Leuphorie', link: 'Évolution' },
+
+    // Ressemblances et légendaires
+    { a: 'Pikachu', b: 'Évoli', link: 'Mascottes adorables' },
+    { a: 'Nidoran mâle', b: 'Nidoran femelle', link: 'Mâle et femelle', hardcore: true },
+    { a: 'Mélofée', b: 'Rondoudou', link: 'Roses et tout mignons' },
+    { a: 'Mewtwo', b: 'Mew', link: 'Le clone et son original', hardcore: true },
+    { a: 'Artikodin', b: 'Sulfura', link: 'Oiseaux légendaires de Kanto' },
+    { a: 'Artikodin', b: 'Électhor', link: 'Oiseaux légendaires de Kanto' },
+    { a: 'Insécateur', b: 'Cizayox', link: 'Mantes à lames tranchantes' },
+    { a: 'Fantominus', b: 'Ectoplasma', link: 'Spectres violets' },
+    { a: 'Dracaufeu', b: 'Tortank', link: 'Starters finaux rivaux' },
+    { a: 'Otaria', b: 'Lamantine', link: 'Phoques' },
+    { a: 'Kokiyas', b: 'Crustabri', link: 'Coquillages' },
   ],
 
   // ------------------------------------------------------------------
@@ -283,7 +333,11 @@ export const WORD_DATA = {
   ],
 }
 
-/** Renvoie toutes les paires d'une liste de catégories (en aplatissant le mix). */
+/**
+ * Renvoie toutes les paires d'une liste de catégories (en aplatissant le mix).
+ * Inclut aussi les CARTES PERSONNALISÉES (créées dans la bibliothèque, stockées
+ * dans le navigateur) dont la catégorie correspond.
+ */
 export function poolForCategories(categoryIds) {
   const ids =
     !categoryIds || categoryIds.length === 0 || categoryIds.includes('mix')
@@ -296,10 +350,17 @@ export function poolForCategories(categoryIds) {
       WORD_DATA[id].forEach((pair) => pool.push({ ...pair, category: id }))
     }
   })
+
+  // Cartes perso (locales) : on les ajoute si leur catégorie est demandée.
+  loadCustomPairs().forEach((p) => {
+    if (p && p.a && p.b && ids.includes(p.category)) pool.push({ ...p })
+  })
+
   return pool
 }
 
-/** Nombre total de paires dans la base (pour l'affichage de la bibliothèque). */
+/** Nombre total de paires (base + cartes perso) pour l'affichage. */
 export function totalPairs() {
-  return Object.values(WORD_DATA).reduce((sum, arr) => sum + arr.length, 0)
+  const base = Object.values(WORD_DATA).reduce((sum, arr) => sum + arr.length, 0)
+  return base + loadCustomPairs().length
 }

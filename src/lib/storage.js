@@ -1,13 +1,14 @@
 /**
  * STOCKAGE LOCAL (localStorage)
  * ----------------------------------------------------------------------------
- * Tout est local : réglages persistants + historique des parties.
+ * Tout est local : réglages persistants + historique + cartes personnalisées.
  * Aucune base de données, aucun compte. Sûr en cas de mode privé (try/catch).
  * ----------------------------------------------------------------------------
  */
 
 const SETTINGS_KEY = 'imposteur:settings'
 const HISTORY_KEY = 'imposteur:history'
+const CUSTOM_KEY = 'imposteur:customPairs'
 
 export const defaultSettings = {
   theme: 'nebula',
@@ -60,4 +61,41 @@ export function clearHistory() {
     /* ignore */
   }
   return []
+}
+
+/* ------------------------------------------------------------------ */
+/* CARTES PERSONNALISÉES                                               */
+/* Créées depuis la bibliothèque (protégées par mot de passe), stockées */
+/* dans le navigateur. Elles s'ajoutent au jeu ET à la bibliothèque.   */
+/* ------------------------------------------------------------------ */
+export function loadCustomPairs() {
+  try {
+    const raw = localStorage.getItem(CUSTOM_KEY)
+    const arr = raw ? JSON.parse(raw) : []
+    return Array.isArray(arr) ? arr : []
+  } catch {
+    return []
+  }
+}
+
+function saveCustomPairs(arr) {
+  try {
+    localStorage.setItem(CUSTOM_KEY, JSON.stringify(arr))
+  } catch {
+    /* ignore */
+  }
+}
+
+export function addCustomPair(pair) {
+  const arr = loadCustomPairs()
+  const entry = { ...pair, id: 'c' + Date.now() + Math.floor(Math.random() * 1000), custom: true }
+  const next = [entry, ...arr]
+  saveCustomPairs(next)
+  return next
+}
+
+export function removeCustomPair(id) {
+  const next = loadCustomPairs().filter((p) => p.id !== id)
+  saveCustomPairs(next)
+  return next
 }
