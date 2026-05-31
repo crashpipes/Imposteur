@@ -9,7 +9,7 @@ import GlowCard from '../components/ui/GlowCard.jsx'
 export default function ResultScreen() {
   const { state, dispatch } = useGame()
   const play = usePlay()
-  const { result, settings } = state
+  const { result } = state
 
   const playersWin = result?.outcome === 'players'
 
@@ -33,8 +33,6 @@ export default function ResultScreen() {
 
   return (
     <div className="relative mx-auto max-w-3xl px-6 py-12">
-      {settings.animations && <Confetti win={playersWin} />}
-
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -125,40 +123,6 @@ export default function ResultScreen() {
         <kbd className="rounded bg-white/10 px-1.5 py-0.5">Entrée</kbd> rejouer ·{' '}
         <kbd className="rounded bg-white/10 px-1.5 py-0.5">Échap</kbd> accueil
       </p>
-    </div>
-  )
-}
-
-/* Confettis légers en pur Framer Motion (pas de lib externe). */
-function Confetti({ win }) {
-  const colors = win
-    ? ['#34d399', '#22d3ee', '#a78bfa', '#fbbf24']
-    : ['#f43f5e', '#fb923c', '#a78bfa', '#f472b6']
-  const pieces = Array.from({ length: 40 })
-  return (
-    <div className="pointer-events-none absolute inset-0 -z-0 overflow-hidden">
-      {pieces.map((_, i) => {
-        const left = Math.random() * 100
-        const delay = Math.random() * 0.6
-        const dur = 2.2 + Math.random() * 1.6
-        const size = 6 + Math.random() * 8
-        return (
-          <motion.span
-            key={i}
-            initial={{ y: -40, opacity: 0, rotate: 0 }}
-            animate={{ y: '110vh', opacity: [0, 1, 1, 0], rotate: 360 }}
-            transition={{ duration: dur, delay, repeat: Infinity, ease: 'linear' }}
-            style={{
-              position: 'absolute',
-              left: `${left}%`,
-              width: size,
-              height: size * 0.5,
-              background: colors[i % colors.length],
-              borderRadius: 2,
-            }}
-          />
-        )
-      })}
     </div>
   )
 }

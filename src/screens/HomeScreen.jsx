@@ -25,16 +25,7 @@ export default function HomeScreen() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center">
-      {/* Logo / titre */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-3 text-sm font-semibold uppercase tracking-[0.5em] text-ink-soft"
-      >
-        Party Game · Discord Stream
-      </motion.div>
-
+      {/* Titre */}
       <motion.h1
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

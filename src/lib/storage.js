@@ -12,7 +12,6 @@ const HISTORY_KEY = 'imposteur:history'
 export const defaultSettings = {
   theme: 'nebula',
   sound: true,
-  animations: true,
   timer: true,
   timerSeconds: 180,
 }

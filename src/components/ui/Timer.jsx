@@ -40,7 +40,12 @@ export default function Timer({ seconds = 180, onTick, onEnd }) {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="relative h-40 w-40">
-        <svg className="h-full w-full -rotate-90" viewBox="0 0 120 120">
+        {/*
+          overflow-visible : indispensable pour que le halo (drop-shadow) du
+          cercle ne soit pas découpé au carré par le SVG. Le viewBox est aussi
+          élargi (-20 .. 140) pour laisser de la place au glow.
+        */}
+        <svg className="h-full w-full -rotate-90 overflow-visible" viewBox="-20 -20 160 160">
           <circle cx="60" cy="60" r={R} fill="none" stroke="rgb(var(--surface-ring) / 0.3)" strokeWidth="8" />
           <motion.circle
             cx="60"
@@ -52,7 +57,7 @@ export default function Timer({ seconds = 180, onTick, onEnd }) {
             strokeLinecap="round"
             strokeDasharray={C}
             strokeDashoffset={C * (1 - pct)}
-            style={{ filter: 'drop-shadow(0 0 8px rgb(var(--neon-primary)/0.8))' }}
+            style={{ filter: 'drop-shadow(0 0 6px rgb(var(--neon-primary)/0.7))' }}
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">

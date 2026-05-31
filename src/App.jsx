@@ -22,8 +22,7 @@ const SCREENS = {
   result: ResultScreen,
 }
 
-// Transition de page commune : fondu + léger glissement vertical.
-// (Pas de scale sur toute la page -> évite le flicker et les sauts de scrollbar.)
+// Transition de page : fondu + léger glissement vertical (discret, non bloquant).
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
@@ -37,18 +36,18 @@ export default function App() {
 
   return (
     <SoundProvider enabled={settings.sound}>
-      <Background animations={settings.animations} />
+      <Background />
       <QuickControls />
 
       <main className="relative min-h-screen w-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={phase}
-            variants={settings.animations ? pageVariants : undefined}
+            variants={pageVariants}
             initial="initial"
             animate="animate"
             exit="exit"
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="min-h-screen w-full transform-gpu will-change-[opacity,transform]"
           >
             <Screen />
