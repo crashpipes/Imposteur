@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useGame } from './store/gameStore.jsx'
 import { SoundProvider } from './hooks/soundContext.jsx'
 import Background from './components/ui/Background.jsx'
@@ -22,13 +22,6 @@ const SCREENS = {
   result: ResultScreen,
 }
 
-// Transition de page : fondu + léger glissement vertical (discret, non bloquant).
-const pageVariants = {
-  initial: { opacity: 0, y: 10 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -10 },
-}
-
 export default function App() {
   const { state } = useGame()
   const { settings, phase } = state
@@ -40,19 +33,23 @@ export default function App() {
       <QuickControls />
 
       <main className="relative min-h-screen w-full">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={phase}
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="min-h-screen w-full transform-gpu will-change-[opacity,transform]"
-          >
-            <Screen />
-          </motion.div>
-        </AnimatePresence>
+        {/*
+          Rendu DIRECT de l'écran courant, avec un simple fondu d'entrée.
+          On n'utilise volontairement PAS <AnimatePresence mode="wait"> :
+          son animation de sortie pouvait rester bloquée (surtout en quittant
+          un écran qui contient lui-même des animations), laissant une page
+          blanche jusqu'au rafraîchissement. Ici, changer de `phase` remonte
+          un nouveau bloc (grâce à `key`) qui s'affiche immédiatement.
+        */}
+        <motion.div
+          key={phase}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="min-h-screen w-full"
+        >
+          <Screen />
+        </motion.div>
       </main>
     </SoundProvider>
   )
