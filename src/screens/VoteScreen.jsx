@@ -39,15 +39,9 @@ export default function VoteScreen() {
     }
   }
 
-  // Mauvaise accusation : continuer à voter ou abandonner.
-  const continueVoting = () => {
-    play('click')
-    dispatch({ type: 'ELIMINATE', index: accused })
-    setAccused(null)
-    setStage('select')
-  }
+  // Mauvaise accusation = partie perdue, on NE revote PAS : l'imposteur l'emporte.
   const impostorsWinByMistake = () => {
-    finish('impostor', { reason: 'Les joueurs n\'ont pas trouvé l\'imposteur.' })
+    finish('impostor', { reason: "Mauvaise accusation : l'imposteur n'a pas été trouvé." })
   }
 
   // L'imposteur accusé tente de deviner le mot principal.
@@ -64,7 +58,7 @@ export default function VoteScreen() {
         play('win')
         finish('players', { guessedWord: guess, correctGuess: false })
       } else {
-        // D'autres imposteurs subsistent : on continue.
+        // D'autres imposteurs subsistent : on continue de chercher.
         play('lose')
         setAccused(null)
         setGuess('')
@@ -151,7 +145,7 @@ export default function VoteScreen() {
         )}
       </AnimatePresence>
 
-      {/* MAUVAISE ACCUSATION */}
+      {/* MAUVAISE ACCUSATION : c'est perdu, pas de second vote. */}
       {stage === 'wrong' && accusedRole && (
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
           <GlowCard className="p-8 text-center">
@@ -159,18 +153,16 @@ export default function VoteScreen() {
             <h3 className="mb-2 font-display text-2xl font-bold text-rose-400">
               {accusedRole.name} n'était pas l'imposteur !
             </h3>
-            <p className="mb-6 text-ink-soft">
+            <p className="mb-2 text-ink-soft">
               Le mot de {accusedRole.name} était «&nbsp;{accusedRole.word}&nbsp;»
               {accusedRole.origin ? ` (${accusedRole.origin})` : ''}.
             </p>
-            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-              {round.roles.length - eliminated.length - 1 > remainingImpostors.length && (
-                <NeonButton variant="secondary" onClick={continueVoting}>
-                  ↺ Revoter
-                </NeonButton>
-              )}
+            <p className="mb-6 font-medium text-rose-300">
+              Mauvaise accusation : l'imposteur l'emporte.
+            </p>
+            <div className="flex justify-center">
               <NeonButton variant="danger" onClick={impostorsWinByMistake}>
-                🕵️ L'imposteur l'emporte
+                Voir le résultat
               </NeonButton>
             </div>
           </GlowCard>
