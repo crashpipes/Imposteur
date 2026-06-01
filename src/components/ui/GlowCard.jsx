@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion'
 
 /**
- * Carte vitrée avec halo néon, utilisée un peu partout.
- * glow=false pour une carte plus sobre.
+ * Carte vitrée — version DOUCE.
+ * Liseré supérieur à peine perceptible et ombre ambiante diffuse
+ * (plus de halo néon). glow=false pour une carte encore plus sobre.
  */
 export default function GlowCard({ children, className = '', glow = true, ...props }) {
   return (
@@ -10,8 +11,8 @@ export default function GlowCard({ children, className = '', glow = true, ...pro
       className={`glass relative overflow-hidden ${glow ? 'shadow-glow-soft' : ''} ${className}`}
       {...props}
     >
-      {/* Liseré lumineux en haut de la carte */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon-primary/70 to-transparent" />
+      {/* Liseré lumineux discret en haut de la carte */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon-primary/30 to-transparent" />
       {children}
     </motion.div>
   )
