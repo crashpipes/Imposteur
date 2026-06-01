@@ -170,6 +170,22 @@ export const WORD_DATA = {
     { a: 'Joel', aFrom: 'The Last of Us', b: 'Ellie', bFrom: 'The Last of Us' },
     { a: 'Arthur Morgan', aFrom: 'Red Dead Redemption', b: 'John Marston', bFrom: 'Red Dead Redemption', hardcore: true },
     { a: 'Leon Kennedy', aFrom: 'Resident Evil', b: 'Chris Redfield', bFrom: 'Resident Evil' },
+    { a: 'Steam', b: 'Epic games' },
+    { a: 'Minecraft', b: 'Grand Theft Auto V' },
+    { a: 'Fortnite', b: 'Apex Legends' },
+    { a: 'Fortnite', b: 'PUBG' },
+    { a: 'Apex Legends', b: 'H1Z1' },
+    { a: 'Grand Theft Auto V', b: 'Red Dead Redemption' },
+    { a: 'Elden Ring', b: 'Dark Souls III' },
+    { a: 'Rocket League', b: 'FIFA' },
+    { a: 'Valorant', b: 'CS2' },
+    { a: 'Genshin Impact', b: 'Honkai Star Rail' },
+    { a: 'League of Legends', b: 'Teamfight Tactics' },
+    { a: 'Resident Evil', b: 'The Last of Us' },
+    { a: 'Brawlhalla', b: 'Super Smash Bros' },
+    { a: 'Overwatch', b: 'Marvel Rivals' },
+    { a: 'Pokémon', b: 'Palworld' },
+    { a: 'Rocket League', b: 'Forza Horizon' },
   ],
 
   personnages: [
@@ -193,6 +209,7 @@ export const WORD_DATA = {
     { a: 'Aquaman', aFrom: 'DC Comics', b: 'Namor', bFrom: 'Marvel', hardcore: true, link: 'Rois des mers' },
     { a: 'Thanos', aFrom: 'Marvel', b: 'Darkseid', bFrom: 'DC Comics', hardcore: true, link: 'Tyrans cosmiques au menton ridé' },
     { a: 'Voldemort', aFrom: 'Harry Potter', b: 'Saroumane', bFrom: 'Le Seigneur des Anneaux', link: 'Mages maléfiques' },
+    { a: 'Voldemort', aFrom: 'Harry Potter', b: 'Dark Vador', bFrom: 'Star Wars', link: 'Antagonistes iconiques' },
   ],
 
   // ------------------------------------------------------------------
@@ -288,6 +305,8 @@ export const WORD_DATA = {
     { a: 'Balai', b: 'Serpillère', link: 'Pour le ménage' },
     { a: 'Pelle', b: 'Pioche', link: 'Outils de jardin' },
     { a: 'Valise', b: 'Sac à dos', link: 'Pour transporter ses affaires' },
+    { a: 'Chaussure', b: 'Pantoufle' },
+    { a: 'Voiture', b: 'Moto' },
   ],
 
   nourriture: [
@@ -309,6 +328,7 @@ export const WORD_DATA = {
     { a: 'Croissant', b: 'Pain au chocolat', link: 'Viennoiseries du matin' },
     { a: 'Ketchup', b: 'Sauce tomate', link: 'Rouges et tomatées' },
     { a: 'Macaron', b: 'Meringue', link: 'Petites douceurs aux blancs en neige' },
+    { a: 'Eau', b: 'Glace', link: 'Les mêmes' },
   ],
 
   animaux: [
