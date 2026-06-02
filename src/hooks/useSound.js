@@ -71,10 +71,9 @@ export function useSound(enabled) {
             tone(f, { type: 'triangle', dur: 0.25, gain: 0.11, delay: i * 0.11 }),
           )
           break
-        case 'lose':
-          ;[392, 330, 262].forEach((f, i) =>
-            tone(f, { type: 'sawtooth', dur: 0.35, gain: 0.1, delay: i * 0.16 }),
-          )
+        case 'lose': // descente DOUCE et feutrée (plus de buzz agressif)
+          tone(415, { type: 'sine', dur: 0.45, gain: 0.07 })
+          tone(311, { type: 'sine', dur: 0.7, gain: 0.06, delay: 0.18 })
           break
         case 'tick':
           tone(880, { type: 'square', dur: 0.04, gain: 0.05 })

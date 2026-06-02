@@ -34,7 +34,8 @@ export default function VoteScreen() {
       play('reveal')
       setStage('guess')
     } else {
-      play('lose')
+      // Pas de son ici : le son (doux) de défaite est joué une seule fois,
+      // sur l'écran de résultat. (Évite le doublon.)
       setStage('wrong')
     }
   }
