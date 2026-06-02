@@ -9,7 +9,7 @@ import GlowCard from '../components/ui/GlowCard.jsx'
 export default function ResultScreen() {
   const { state, dispatch } = useGame()
   const play = usePlay()
-  const { result } = state
+  const { result, scores } = state
 
   const playersWin = result?.outcome === 'players'
 
@@ -20,18 +20,32 @@ export default function ResultScreen() {
 
   const replay = () => {
     play('flip')
-    dispatch({ type: 'START_ROUND' }) // relance immédiatement avec les mêmes réglages
+    dispatch({ type: 'START_ROUND' }) // nouvelle manche, score conservé
   }
-  // « Nouvelle partie » -> retour au LOBBY DE CONFIG (joueurs/réglages conservés),
-  // pas au menu d'accueil.
+  // « Nouvelle partie » -> lobby de config (joueurs/réglages + score conservés).
   const newGame = () => {
     play('click')
     dispatch({ type: 'REPLAY' })
+  }
+  // « Score final » -> écran de classement (fin de session).
+  const showScore = () => {
+    play('reveal')
+    dispatch({ type: 'SET_PHASE', phase: 'scoreboard' })
   }
 
   useKeyboard({ Enter: replay, Escape: newGame })
 
   if (!result) return null
+
+  const impostorCount = result.roles.filter((r) => r.isImpostor).length
+  const pointsText = playersWin
+    ? '+1 point pour chaque joueur innocent'
+    : `+2 points pour ${impostorCount > 1 ? 'les imposteurs' : "l'imposteur"}`
+
+  const ranking = Object.entries(scores || {})
+    .map(([name, points]) => ({ name, points }))
+    .sort((a, b) => b.points - a.points)
+  const topScore = ranking.length ? ranking[0].points : 0
 
   return (
     <div className="relative mx-auto max-w-3xl px-6 py-12">
@@ -39,7 +53,7 @@ export default function ResultScreen() {
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: 'spring', stiffness: 200, damping: 16 }}
-        className="mb-8 text-center"
+        className="mb-6 text-center"
       >
         <div className="mb-3 text-7xl">{playersWin ? '🏆' : '🕵️'}</div>
         <h2
@@ -56,6 +70,9 @@ export default function ResultScreen() {
             `Mauvaise réponse de l'imposteur (« ${result.guessedWord} »). Démasqué !`}
           {result.reason && result.reason}
         </p>
+        <div className="mt-3 inline-block rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm font-medium text-ink">
+          {pointsText}
+        </div>
       </motion.div>
 
       {/* Mots de la manche */}
@@ -85,7 +102,7 @@ export default function ResultScreen() {
       </GlowCard>
 
       {/* Récap des rôles */}
-      <GlowCard className="mb-8 p-6">
+      <GlowCard className="mb-6 p-6">
         <h3 className="mb-4 font-display text-lg font-semibold">Les rôles</h3>
         <ul className="space-y-2">
           {result.roles.map((role, i) => (
@@ -113,12 +130,39 @@ export default function ResultScreen() {
         </ul>
       </GlowCard>
 
-      <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+      {/* Score de la session (cumulé) */}
+      {ranking.length > 0 && (
+        <GlowCard className="mb-8 p-6">
+          <h3 className="mb-3 font-display text-lg font-semibold">Score de la session</h3>
+          <ul className="space-y-1.5">
+            {ranking.map((r) => {
+              const leader = r.points === topScore && topScore > 0
+              return (
+                <li
+                  key={r.name}
+                  className="flex items-center justify-between rounded-lg px-3 py-1.5 text-sm"
+                >
+                  <span className={`font-medium ${leader ? 'text-neon-primary' : 'text-ink'}`}>
+                    {leader ? '👑 ' : ''}
+                    {r.name}
+                  </span>
+                  <span className="font-display font-bold tabular-nums">{r.points} pts</span>
+                </li>
+              )
+            })}
+          </ul>
+        </GlowCard>
+      )}
+
+      <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
         <NeonButton size="lg" onClick={replay}>
-          🔄 Rejouer (même équipe)
+          🔄 Rejouer
         </NeonButton>
         <NeonButton size="lg" variant="secondary" onClick={newGame}>
           ⚙️ Nouvelle partie
+        </NeonButton>
+        <NeonButton size="lg" variant="secondary" onClick={showScore}>
+          🏁 Score final
         </NeonButton>
       </div>
       <p className="mt-4 text-center text-xs text-ink-soft/70">

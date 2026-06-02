@@ -38,6 +38,7 @@ export const CATEGORIES = {
   anime: { id: 'anime', label: 'Anime', icon: '🍥' },
   jeux: { id: 'jeux', label: 'Jeux vidéo', icon: '🎮' },
   personnages: { id: 'personnages', label: 'Personnages fictifs', icon: '🦸' },
+  personnalites: { id: 'personnalites', label: 'Personnalités publiques', icon: '🌟' },
   pokemon: { id: 'pokemon', label: 'Pokémon', icon: '⚡' },
   pays: { id: 'pays', label: 'Pays', icon: '🌍' },
   objets: { id: 'objets', label: 'Objets', icon: '🧰' },
@@ -210,6 +211,60 @@ export const WORD_DATA = {
     { a: 'Thanos', aFrom: 'Marvel', b: 'Darkseid', bFrom: 'DC Comics', hardcore: true, link: 'Tyrans cosmiques au menton ridé' },
     { a: 'Voldemort', aFrom: 'Harry Potter', b: 'Saroumane', bFrom: 'Le Seigneur des Anneaux', link: 'Mages maléfiques' },
     { a: 'Voldemort', aFrom: 'Harry Potter', b: 'Dark Vador', bFrom: 'Star Wars', link: 'Antagonistes iconiques' },
+  ],
+
+  // ------------------------------------------------------------------
+  // PERSONNALITÉS PUBLIQUES : vraies célébrités (sport, musique, ciné,
+  // tech...). On se base sur le métier, la ressemblance physique ou la
+  // rivalité. Ton léger, aucune intention de moquerie.
+  // ------------------------------------------------------------------
+  personnalites: [
+    // Sport
+    { a: 'Messi', b: 'Cristiano Ronaldo', link: 'Rivaux légendaires du foot' },
+    { a: 'Mbappé', b: 'Haaland', link: 'Jeunes stars du foot' },
+    { a: 'Zidane', b: 'Ronaldinho', link: 'Légendes du foot des années 2000' },
+    { a: 'Neymar', b: 'Mbappé', link: 'Attaquants stars du PSG' },
+    { a: 'LeBron James', b: 'Michael Jordan', link: 'Légendes de la NBA' },
+    { a: 'Federer', b: 'Nadal', link: 'Rivaux du tennis' },
+    { a: 'Djokovic', b: 'Nadal', link: 'Rivaux du tennis' },
+    { a: 'Usain Bolt', b: 'Carl Lewis', link: 'Rois du sprint' },
+    { a: 'Mike Tyson', b: 'Mohamed Ali', link: 'Légendes de la boxe' },
+    { a: 'Tony Parker', b: 'Boris Diaw', link: 'Basketteurs français' },
+
+    // Musique
+    { a: 'Beyoncé', b: 'Rihanna', link: 'Divas de la pop' },
+    { a: 'Drake', b: 'The Weeknd', link: 'Stars canadiennes du R&B' },
+    { a: 'Eminem', b: '50 Cent', link: 'Rappeurs américains' },
+    { a: 'Michael Jackson', b: 'Prince', link: 'Icônes de la pop des années 80' },
+    { a: 'Booba', b: 'Rohff', link: 'Rivaux du rap français' },
+    { a: 'Jul', b: 'SCH', link: 'Rappeurs marseillais' },
+    { a: 'Orelsan', b: 'Stromae', link: 'Artistes francophones à textes' },
+    { a: 'Adele', b: 'Sia', link: 'Grandes voix de la pop' },
+    { a: 'Taylor Swift', b: 'Katy Perry', link: 'Stars de la pop américaine' },
+
+    // Cinéma — dont sosies souvent confondus
+    { a: 'Leonardo DiCaprio', b: 'Brad Pitt', link: 'Stars de Hollywood' },
+    { a: 'Robert De Niro', b: 'Al Pacino', link: 'Légendes du cinéma' },
+    { a: 'Tom Cruise', b: 'Tom Hanks', link: 'Acteurs américains prénommés Tom' },
+    { a: 'Natalie Portman', b: 'Keira Knightley', link: 'Actrices souvent confondues', hardcore: true },
+    { a: 'Henry Cavill', b: 'Matt Bomer', link: 'Se ressemblent physiquement', hardcore: true },
+    { a: 'Mark Wahlberg', b: 'Matt Damon', link: 'Souvent confondus', hardcore: true },
+    { a: 'Amy Adams', b: 'Isla Fisher', link: 'Rousses souvent confondues', hardcore: true },
+    { a: 'Will Ferrell', b: 'Chad Smith', link: 'Sosies célèbres' },
+
+    // Tech & science
+    { a: 'Elon Musk', b: 'Jeff Bezos', link: 'Milliardaires de la tech' },
+    { a: 'Bill Gates', b: 'Steve Jobs', link: "Pionniers de l'informatique" },
+    { a: 'Albert Einstein', b: 'Isaac Newton', link: 'Physiciens de génie' },
+
+    // YouTube & streaming (France)
+    { a: 'Squeezie', b: 'Cyprien', link: 'Pionniers de YouTube France' },
+    { a: 'McFly', b: 'Carlito', link: 'Duo de youtubeurs' },
+    { a: 'Inoxtag', b: 'Michou', link: 'Youtubeurs amis' },
+    { a: 'Gotaga', b: 'Domingo', link: 'Stars du streaming français' },
+
+    // Cuisine
+    { a: 'Gordon Ramsay', b: 'Cyril Lignac', link: 'Chefs stars de la télé' },
   ],
 
   // ------------------------------------------------------------------

@@ -4,7 +4,13 @@
  * Source unique de vérité pour tout le flow. La logique de génération vit dans
  * lib/wordGenerator ; ici on orchestre seulement les phases et la persistance.
  *
- * Phases : home -> setup -> reveal -> discussion -> vote -> result
+ * Phases : home -> setup -> reveal -> discussion -> vote -> result -> scoreboard
+ *
+ * SCORE DE SESSION (en mémoire seulement) :
+ *   - `scores` = { nomDuJoueur: points }
+ *   - on attribue des points à chaque manche (dans SET_RESULT)
+ *   - conservé quand on rejoue / fait une nouvelle partie (même session)
+ *   - REMIS À ZÉRO uniquement au retour au menu (NEW_GAME)
  * ----------------------------------------------------------------------------
  */
 
@@ -20,6 +26,10 @@ import {
 } from '../lib/storage.js'
 
 const GameContext = createContext(null)
+
+// Points attribués à chaque manche.
+const POINTS_PLAYERS = 1 // par joueur innocent quand les joueurs gagnent
+const POINTS_IMPOSTOR = 2 // par imposteur quand l'imposteur gagne
 
 const initialConfig = {
   players: ['', '', '', ''],
@@ -38,8 +48,27 @@ function init() {
     revealed: [], // index des joueurs ayant déjà vu leur carte
     eliminated: [], // index éliminés au vote
     result: null,
+    scores: {}, // score de la session { nom: points }
     history: loadHistory(),
   }
+}
+
+// Calcule les nouveaux scores après une manche.
+function applyScores(prev, result) {
+  const scores = { ...prev }
+  result.roles.forEach((r) => {
+    if (scores[r.name] === undefined) scores[r.name] = 0
+  })
+  if (result.outcome === 'players') {
+    result.roles.forEach((r) => {
+      if (!r.isImpostor) scores[r.name] += POINTS_PLAYERS
+    })
+  } else {
+    result.roles.forEach((r) => {
+      if (r.isImpostor) scores[r.name] += POINTS_IMPOSTOR
+    })
+  }
+  return scores
 }
 
 function reducer(state, action) {
@@ -62,6 +91,7 @@ function reducer(state, action) {
         categories: state.config.categories,
         mrWhite: state.config.mrWhite,
       })
+      // On garde les scores (même session) ; on remet juste la manche à zéro.
       return { ...state, round, revealed: [], eliminated: [], result: null, phase: 'reveal' }
     }
 
@@ -80,8 +110,11 @@ function reducer(state, action) {
       return { ...state, eliminated }
     }
 
-    case 'SET_RESULT':
-      return { ...state, result: action.result }
+    case 'SET_RESULT': {
+      // On enregistre le résultat ET on met à jour le score de la session.
+      const scores = applyScores(state.scores, action.result)
+      return { ...state, result: action.result, scores }
+    }
 
     case 'SAVE_HISTORY': {
       const history = addHistoryEntry(action.entry)
@@ -91,11 +124,19 @@ function reducer(state, action) {
     case 'CLEAR_HISTORY':
       return { ...state, history: clearHistory() }
 
-    case 'REPLAY': // rejouer avec les mêmes joueurs/réglages
+    case 'REPLAY': // nouvelle partie / lobby de config -> on GARDE le score
       return { ...state, round: null, revealed: [], eliminated: [], result: null, phase: 'setup' }
 
-    case 'NEW_GAME': // retour accueil
-      return { ...state, round: null, revealed: [], eliminated: [], result: null, phase: 'home' }
+    case 'NEW_GAME': // retour accueil -> on REMET LE SCORE À ZÉRO
+      return {
+        ...state,
+        round: null,
+        revealed: [],
+        eliminated: [],
+        result: null,
+        scores: {},
+        phase: 'home',
+      }
 
     default:
       return state
