@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Imposteur — Ajouter des cartes</title>
+    <style>
+      :root {
+        --bg: #15141f; --bg2: #1b1a2b; --card: #272545; --ink: #e9e7f5;
+        --soft: #a5a1c0; --line: #ffffff1a; --accent: #a78bfa; --accent2: #818cf8;
+        --ok: #6ee7a8; --danger: #f4b6d5;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: linear-gradient(160deg, #1b1a2b, #15141f); color: var(--ink);
+        min-height: 100vh; padding: 28px 16px 60px;
+      }
+      .wrap { max-width: 920px; margin: 0 auto; }
+      h1 { font-size: 26px; margin: 0 0 4px; }
+      .sub { color: var(--soft); margin: 0 0 24px; font-size: 14px; }
+      .card {
+        background: #27254599; border: 1px solid var(--line); border-radius: 18px;
+        padding: 20px; margin-bottom: 18px;
+      }
+      h2 { font-size: 16px; margin: 0 0 14px; }
+      label { display: block; font-size: 13px; color: var(--soft); margin-bottom: 4px; }
+      .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+      input, select {
+        width: 100%; background: #15141f; border: 1px solid var(--line); color: var(--ink);
+        border-radius: 12px; padding: 10px 12px; font-size: 14px; outline: none;
+      }
+      input:focus, select:focus { border-color: var(--accent); }
+      .row { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+      .chk { display: flex; align-items: center; gap: 6px; color: var(--soft); font-size: 14px; }
+      button {
+        background: linear-gradient(90deg, var(--accent), var(--accent2)); color: #1b1a2b;
+        border: 0; border-radius: 12px; padding: 10px 16px; font-weight: 600; cursor: pointer;
+        font-size: 14px;
+      }
+      button.sec { background: #ffffff14; color: var(--ink); border: 1px solid var(--line); }
+      button.mini { padding: 4px 8px; font-size: 12px; }
+      button:hover { filter: brightness(1.06); }
+      table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); }
+      th { color: var(--soft); font-weight: 600; }
+      .tag { display: inline-block; background: #ffffff14; border-radius: 999px; padding: 1px 8px; font-size: 11px; color: var(--soft); }
+      textarea {
+        width: 100%; min-height: 160px; background: #0f0e17; color: #d7d3f0; border: 1px solid var(--line);
+        border-radius: 12px; padding: 12px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px;
+      }
+      .muted { color: var(--soft); font-size: 13px; }
+      .pill { font-size: 12px; color: var(--soft); }
+      .hint { background: #a78bfa14; border: 1px solid #a78bfa33; border-radius: 12px; padding: 12px 14px; font-size: 13px; color: #cdc6ee; }
+      code { background: #0f0e17; padding: 1px 6px; border-radius: 6px; }
+      .right { margin-left: auto; }
+      .ok { color: var(--ok); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>🃏 Ajouter des cartes — Imposteur</h1>
+      <p class="sub">
+        Outil perso (hors-ligne). Remplis le formulaire, ta liste est sauvegardée
+        automatiquement dans ce navigateur. Ensuite, copie le code généré dans
+        <code>src/data/wordPairs.js</code> — ou exporte le JSON pour le script auto.
+      </p>
+
+      <!-- FORMULAIRE -->
+      <div class="card">
+        <h2>➕ Nouvelle carte</h2>
+        <div class="grid">
+          <div>
+            <label>Catégorie</label>
+            <select id="category"></select>
+          </div>
+          <div>
+            <label>Lien (optionnel, affiché seulement dans la bibliothèque)</label>
+            <input id="link" placeholder="ex. Se ressemblent physiquement" />
+          </div>
+          <div>
+            <label>Mot A *</label>
+            <input id="a" placeholder="ex. Pikachu" />
+          </div>
+          <div>
+            <label>Univers A (optionnel)</label>
+            <input id="aFrom" placeholder="ex. Pokémon" />
+          </div>
+          <div>
+            <label>Mot B *</label>
+            <input id="b" placeholder="ex. Raichu" />
+          </div>
+          <div>
+            <label>Univers B (optionnel)</label>
+            <input id="bFrom" placeholder="ex. Pokémon" />
+          </div>
+        </div>
+        <div class="row">
+          <label class="chk"><input type="checkbox" id="hardcore" /> 🔥 Très proche (hardcore)</label>
+          <button id="add" class="right">Ajouter à la liste</button>
+        </div>
+        <p id="formMsg" class="muted" style="margin: 10px 0 0"></p>
+      </div>
+
+      <!-- LISTE -->
+      <div class="card">
+        <h2>📋 Cartes en attente (<span id="count">0</span>)</h2>
+        <div id="listWrap"><p class="muted">Aucune carte pour l'instant.</p></div>
+        <div class="row">
+          <button id="gen">Générer le code à coller</button>
+          <button id="export" class="sec">⬇️ Exporter JSON</button>
+          <button id="import" class="sec">⬆️ Importer JSON</button>
+          <button id="clear" class="sec right">🗑️ Tout vider</button>
+          <input id="file" type="file" accept="application/json" style="display:none" />
+        </div>
+      </div>
+
+      <!-- SORTIE -->
+      <div class="card" id="outCard" style="display:none">
+        <h2>📦 Code à coller dans <code>src/data/wordPairs.js</code></h2>
+        <p class="hint">
+          Pour chaque catégorie ci-dessous : colle les lignes <strong>juste avant le
+          <code>],</code></strong> qui ferme le tableau de cette catégorie.
+          (Astuce plus simple : utilise « Exporter JSON » puis le script
+          <code>node outils/ajouter-cartes.mjs</code> qui fait l'insertion tout seul.)
+        </p>
+        <div id="output"></div>
+      </div>
+    </div>
+
+    <script>
+      // Doit correspondre aux catégories de src/data/wordPairs.js
+      const CATEGORIES = [
+        ['films', '🎬 Films'],
+        ['series', '📺 Séries'],
+        ['anime', '🍥 Anime'],
+        ['jeux', '🎮 Jeux vidéo'],
+        ['personnages', '🦸 Personnages fictifs'],
+        ['personnalites', '🌟 Personnalités publiques'],
+        ['pokemon', '⚡ Pokémon'],
+        ['pays', '🌍 Pays'],
+        ['objets', '🧰 Objets'],
+        ['nourriture', '🍔 Nourriture'],
+        ['animaux', '🐾 Animaux'],
+      ]
+      const KEY = 'imposteur:outil:cartes'
+      const $ = (id) => document.getElementById(id)
+      let cards = load()
+
+      // Remplit le select
+      CATEGORIES.forEach(([id, label]) => {
+        const o = document.createElement('option')
+        o.value = id; o.textContent = label
+        $('category').appendChild(o)
+      })
+
+      function load() {
+        try { return JSON.parse(localStorage.getItem(KEY)) || [] } catch { return [] }
+      }
+      function save() { try { localStorage.setItem(KEY, JSON.stringify(cards)) } catch {} }
+
+      // Sérialise une valeur en chaîne JS sûre (guillemets doubles, échappement auto).
+      const q = (s) => JSON.stringify(String(s))
+
+      function cardLine(c) {
+        const p = [`a: ${q(c.a)}`]
+        if (c.aFrom) p.push(`aFrom: ${q(c.aFrom)}`)
+        p.push(`b: ${q(c.b)}`)
+        if (c.bFrom) p.push(`bFrom: ${q(c.bFrom)}`)
+        if (c.link) p.push(`link: ${q(c.link)}`)
+        if (c.hardcore) p.push('hardcore: true')
+        return `    { ${p.join(', ')} },`
+      }
+
+      function catLabel(id) {
+        const f = CATEGORIES.find((c) => c[0] === id)
+        return f ? f[1] : id
+      }
+
+      function renderList() {
+        $('count').textContent = cards.length
+        if (!cards.length) {
+          $('listWrap').innerHTML = '<p class="muted">Aucune carte pour l\'instant.</p>'
+          return
+        }
+        let html = '<table><thead><tr><th>Cat.</th><th>Mot A</th><th>Mot B</th><th>Lien</th><th></th></tr></thead><tbody>'
+        cards.forEach((c, i) => {
+          html += `<tr>
+            <td><span class="tag">${catLabel(c.category)}</span></td>
+            <td>${esc(c.a)}${c.aFrom ? ` <span class="pill">(${esc(c.aFrom)})</span>` : ''}</td>
+            <td>${esc(c.b)}${c.bFrom ? ` <span class="pill">(${esc(c.bFrom)})</span>` : ''}</td>
+            <td class="muted">${esc(c.link || '')}${c.hardcore ? ' 🔥' : ''}</td>
+            <td><button class="sec mini" data-del="${i}">✕</button></td>
+          </tr>`
+        })
+        html += '</tbody></table>'
+        $('listWrap').innerHTML = html
+        $('listWrap').querySelectorAll('[data-del]').forEach((b) =>
+          b.addEventListener('click', () => { cards.splice(+b.dataset.del, 1); save(); renderList() }),
+        )
+      }
+      function esc(s) { return String(s).replace(/[&<>]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])) }
+
+      $('add').addEventListener('click', () => {
+        const c = {
+          category: $('category').value,
+          a: $('a').value.trim(),
+          aFrom: $('aFrom').value.trim(),
+          b: $('b').value.trim(),
+          bFrom: $('bFrom').value.trim(),
+          link: $('link').value.trim(),
+          hardcore: $('hardcore').checked,
+        }
+        if (!c.a || !c.b) { $('formMsg').innerHTML = '<span style="color:var(--danger)">Il faut au moins Mot A et Mot B.</span>'; return }
+        cards.push(c); save(); renderList()
+        // Réinitialise les champs mots (garde la catégorie pour enchaîner)
+        ;['a', 'aFrom', 'b', 'bFrom', 'link'].forEach((id) => ($(id).value = ''))
+        $('hardcore').checked = false
+        $('formMsg').innerHTML = '<span class="ok">✓ Ajoutée : ' + esc(c.a) + ' ↔ ' + esc(c.b) + '</span>'
+        $('a').focus()
+      })
+
+      $('gen').addEventListener('click', () => {
+        if (!cards.length) return
+        // Regroupe par catégorie, dans l'ordre des CATEGORIES
+        const out = $('output'); out.innerHTML = ''
+        CATEGORIES.forEach(([id, label]) => {
+          const sub = cards.filter((c) => c.category === id)
+          if (!sub.length) return
+          const block = sub.map(cardLine).join('\n')
+          const div = document.createElement('div')
+          div.style.marginBottom = '16px'
+          div.innerHTML = `<div class="row"><strong>${label}</strong>
+            <span class="pill">${sub.length} carte(s)</span>
+            <button class="sec mini copyBtn">Copier</button></div>
+            <textarea readonly>${esc(block)}</textarea>`
+          out.appendChild(div)
+          const ta = div.querySelector('textarea')
+          div.querySelector('.copyBtn').addEventListener('click', () => {
+            ta.select(); document.execCommand('copy')
+            div.querySelector('.copyBtn').textContent = '✓ Copié'
+            setTimeout(() => (div.querySelector('.copyBtn').textContent = 'Copier'), 1200)
+          })
+        })
+        $('outCard').style.display = 'block'
+        $('outCard').scrollIntoView({ behavior: 'smooth' })
+      })
+
+      $('export').addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(cards, null, 2)], { type: 'application/json' })
+        const a = document.createElement('a')
+        a.href = URL.createObjectURL(blob); a.download = 'cartes.json'; a.click()
+        URL.revokeObjectURL(a.href)
+      })
+
+      $('import').addEventListener('click', () => $('file').click())
+      $('file').addEventListener('change', (e) => {
+        const f = e.target.files[0]; if (!f) return
+        const r = new FileReader()
+        r.onload = () => {
+          try {
+            const data = JSON.parse(r.result)
+            if (Array.isArray(data)) { cards = cards.concat(data); save(); renderList(); alert('Importé : ' + data.length + ' carte(s).') }
+          } catch { alert('Fichier JSON invalide.') }
+        }
+        r.readAsText(f); e.target.value = ''
+      })
+
+      $('clear').addEventListener('click', () => {
+        if (confirm('Vider toute la liste ?')) { cards = []; save(); renderList(); $('outCard').style.display = 'none' }
+      })
+
+      renderList()
+    </script>
+  </body>
+</html>

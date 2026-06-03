@@ -362,6 +362,7 @@ export const WORD_DATA = {
     { a: 'Valise', b: 'Sac à dos', link: 'Pour transporter ses affaires' },
     { a: 'Chaussure', b: 'Pantoufle' },
     { a: 'Voiture', b: 'Moto' },
+    { a: "Ceinture", b: "Fouet", link: "Peuvent servir à la même chose" },
   ],
 
   nourriture: [

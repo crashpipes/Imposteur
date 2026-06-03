@@ -3,3 +3,8 @@ dist
 *.local
 .DS_Store
 vite.config.js.timestamp-*
+
+# Sauvegardes créées par outils/ajouter-cartes.mjs
+*.bak
+# Fichier de travail de l'outil d'ajout de cartes (optionnel)
+outils/cartes.json
