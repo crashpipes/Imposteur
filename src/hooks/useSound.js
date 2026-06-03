@@ -71,9 +71,10 @@ export function useSound(enabled) {
             tone(f, { type: 'triangle', dur: 0.25, gain: 0.11, delay: i * 0.11 }),
           )
           break
-        case 'lose': // descente DOUCE et feutrée (plus de buzz agressif)
-          tone(415, { type: 'sine', dur: 0.45, gain: 0.07 })
-          tone(311, { type: 'sine', dur: 0.7, gain: 0.06, delay: 0.18 })
+        case 'lose': // défaite : descente DOUCE mais bien audible (timbre chaud, pas de buzz)
+          tone(440, { type: 'triangle', dur: 0.34, gain: 0.12 })
+          tone(349, { type: 'triangle', dur: 0.4, gain: 0.12, delay: 0.16 })
+          tone(262, { type: 'triangle', dur: 0.6, gain: 0.11, delay: 0.34 })
           break
         case 'tick':
           tone(880, { type: 'square', dur: 0.04, gain: 0.05 })
