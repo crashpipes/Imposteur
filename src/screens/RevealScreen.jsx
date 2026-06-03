@@ -1,15 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import QRCode from 'qrcode'
 import { useGame } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import { CATEGORIES } from '../data/wordPairs.js'
+import { cardUrl } from '../lib/cardLink.js'
 import NeonButton from '../components/ui/NeonButton.jsx'
 
 export default function RevealScreen() {
   const { state, dispatch } = useGame()
   const play = usePlay()
   const { round, revealed } = state
+  const qrMode = state.config.qrMode
 
   // État du modal lifté ici pour pouvoir le piloter aussi au clavier.
   const [active, setActive] = useState(null) // index du joueur dont la carte est ouverte
@@ -109,14 +112,15 @@ export default function RevealScreen() {
         Chacun son tour 🤫
       </h2>
       <p className="mx-auto mb-6 max-w-lg text-center text-ink-soft">
-        L'hôte tend l'écran à chaque joueur. Montrez la carte, puis masquez avant
-        de passer au suivant. Déjà joué ce duo ? Tapez « 🔄 Autre carte ».
+        {qrMode
+          ? 'Mode QR : chaque joueur scanne son code à son tour pour voir son mot sur son téléphone.'
+          : "L'hôte tend l'écran à chaque joueur. Montrez la carte, puis masquez avant de passer au suivant."}
       </p>
 
       {/* Aide clavier */}
       <div className="mx-auto mb-8 flex max-w-md items-center justify-center gap-2 text-xs text-ink-soft/80">
         <kbd className="rounded bg-white/10 px-2 py-0.5">Espace</kbd>
-        <span>montrer la carte suivante, puis la masquer</span>
+        <span>{qrMode ? 'afficher le QR suivant, puis le masquer' : 'montrer la carte suivante, puis la masquer'}</span>
       </div>
 
       {/* Progression */}
@@ -160,7 +164,7 @@ export default function RevealScreen() {
               )}
               <span className="font-display text-lg font-semibold">{role.name}</span>
               <span className="mt-1 text-xs text-ink-soft">
-                {seen ? '✓ Carte vue' : 'Toucher pour voir'}
+                {seen ? '✓ Carte vue' : qrMode ? 'Toucher pour le QR' : 'Toucher pour voir'}
               </span>
             </motion.button>
           )
@@ -183,6 +187,7 @@ export default function RevealScreen() {
           <RoleModal
             role={round.roles[active]}
             stage={stage}
+            qrMode={qrMode}
             onReveal={doReveal}
             onClose={closeActive}
           />
@@ -195,18 +200,49 @@ export default function RevealScreen() {
 /* --------------------------------------------------------------------------
  * Carte de rôle plein écran (présentation pure, pilotée par `stage`).
  *
- * IMPORTANT : la carte est VOLONTAIREMENT identique pour l'imposteur et les
- * joueurs (même couleur, même icône, même son, aucun label de rôle). On ne
- * montre QUE le mot + son univers.
+ * Mode normal : la carte montre le mot + son univers (identique pour tous).
+ * Mode QR      : la carte montre un QR code à scanner ; le mot s'affiche sur
+ *                le téléphone du joueur (page CardView), jamais sur l'écran.
  *
- * Exception assumée — le mode Mr. White : l'imposteur n'a aucun mot, donc sa
- * carte affiche « Mr. White ». C'est le principe du mode : il sait qu'il est
- * l'imposteur et doit deviner le mot commun en se fondant dans la masse.
- *
- * Étapes : 'back' (carte face cachée) -> 'front' (mot + œuvre, ou Mr. White).
+ * Étapes : 'back' (carte face cachée) -> 'front' (mot/œuvre OU QR).
  * ------------------------------------------------------------------------ */
-function RoleModal({ role, stage, onReveal, onClose }) {
+function RoleModal({ role, stage, qrMode, onReveal, onClose }) {
   const isMrWhite = !role.word
+  const [qr, setQr] = useState('')
+  const [copied, setCopied] = useState(false)
+
+  // Génère le QR (data URL) quand la carte est révélée en mode QR.
+  useEffect(() => {
+    if (stage !== 'front' || !qrMode) {
+      setQr('')
+      return
+    }
+    let alive = true
+    const url = cardUrl({ name: role.name, word: role.word, origin: role.origin, mrWhite: isMrWhite })
+    QRCode.toDataURL(url, {
+      width: 240,
+      margin: 1,
+      errorCorrectionLevel: 'M',
+      color: { dark: '#141226', light: '#ffffff' },
+    })
+      .then((d) => alive && setQr(d))
+      .catch(() => alive && setQr(''))
+    return () => {
+      alive = false
+    }
+  }, [stage, qrMode, role, isMrWhite])
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        cardUrl({ name: role.name, word: role.word, origin: role.origin, mrWhite: isMrWhite }),
+      )
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      /* clipboard indisponible */
+    }
+  }
 
   return (
     <motion.div
@@ -236,13 +272,13 @@ function RoleModal({ role, stage, onReveal, onClose }) {
               transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
               className="text-7xl"
             >
-              🎴
+              {qrMode ? '📱' : '🎴'}
             </motion.div>
             <div className="mt-8 text-ink-soft">Toucher / Espace pour révéler</div>
           </motion.button>
         )}
 
-        {/* Face révélée : le mot + son œuvre, OU la carte Mr. White */}
+        {/* Face révélée */}
         {stage === 'front' && (
           <motion.div
             key="front"
@@ -250,17 +286,40 @@ function RoleModal({ role, stage, onReveal, onClose }) {
             animate={{ rotateY: 0, opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-            className="flex h-[28rem] w-80 transform-gpu flex-col items-center justify-center rounded-[2rem] border border-neon-primary/50 bg-gradient-to-br from-surface-soft to-surface p-8 text-center shadow-glow [backface-visibility:hidden]"
+            className="flex min-h-[28rem] w-80 transform-gpu flex-col items-center justify-center rounded-[2rem] border border-neon-primary/50 bg-gradient-to-br from-surface-soft to-surface p-8 text-center shadow-glow [backface-visibility:hidden]"
           >
             <div className="text-sm uppercase tracking-[0.3em] text-ink-soft">{role.name}</div>
 
-            {isMrWhite ? (
+            {qrMode ? (
+              /* ---- Mode QR : on montre un code à scanner (jamais le mot) ---- */
+              <>
+                <p className="mb-3 mt-4 text-sm text-ink-soft">📱 Scanne pour voir ton mot</p>
+                {qr ? (
+                  <img
+                    src={qr}
+                    alt="QR code à scanner"
+                    className="h-52 w-52 rounded-2xl bg-white p-2"
+                  />
+                ) : (
+                  <div className="grid h-52 w-52 place-items-center rounded-2xl bg-white/10 text-sm text-ink-soft">
+                    Génération…
+                  </div>
+                )}
+                <button
+                  onClick={copyLink}
+                  className="mt-4 text-xs text-ink-soft underline-offset-4 transition hover:text-ink hover:underline"
+                >
+                  {copied ? '✓ Lien copié' : '🔗 Copier le lien'}
+                </button>
+                <p className="mt-2 max-w-[15rem] text-xs text-ink-soft/70">
+                  Chaque joueur scanne SON QR à son tour — ne montre pas celui des autres.
+                </p>
+              </>
+            ) : isMrWhite ? (
               /* ---- Carte Mr. White : aucun mot ---- */
               <>
                 <div className="my-5 text-6xl">🕵️</div>
-                <div className="mb-2 font-display text-4xl font-bold text-rose-400">
-                  Mr. White
-                </div>
+                <div className="mb-2 font-display text-4xl font-bold text-rose-400">Mr. White</div>
                 <p className="text-sm text-ink-soft">Tu n'as aucun mot.</p>
                 <p className="mt-3 max-w-[15rem] text-xs text-ink-soft/80">
                   Écoute les autres, devine le mot commun et fonds-toi dans la masse.
@@ -281,7 +340,6 @@ function RoleModal({ role, stage, onReveal, onClose }) {
                   {role.word}
                 </motion.div>
 
-                {/* Œuvre d'origine : lève l'ambiguïté entre homonymes */}
                 {role.origin && (
                   <motion.div
                     initial={{ opacity: 0, y: 6 }}

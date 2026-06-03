@@ -194,6 +194,7 @@ export default function SetupScreen() {
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <Toggle label="⏱️ Timer" desc="Minuteur de discussion" value={settings.timer} onChange={() => flip('timer')} />
           <Toggle label="🕵️ Mode Mr. White" desc="L'imposteur n'a aucun mot" value={config.mrWhite} onChange={() => flipConfig('mrWhite')} />
+          <Toggle label="📱 Mode QR code" desc="Les joueurs scannent leur mot" value={config.qrMode} onChange={() => flipConfig('qrMode')} />
         </div>
       </GlowCard>
 

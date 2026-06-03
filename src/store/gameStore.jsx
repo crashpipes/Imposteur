@@ -37,6 +37,7 @@ const initialConfig = {
   categories: ['mix'],
   tours: 2, // nombre de tours de parole avant le vote
   mrWhite: false, // mode Mr. White : l'imposteur n'a aucun mot
+  qrMode: false, // mode QR code : les joueurs scannent pour voir leur mot
 }
 
 function init() {
