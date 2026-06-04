@@ -5,10 +5,9 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------ */
-/* THÈMES VISUELS — version DOUCE                                       */
-/* Mêmes familles de teintes, mais fortement désaturées et éclaircies. */
-/* Plus de néon agressif : faible contraste, aucun noir/blanc pur.     */
-/* Les couleurs restent en RGB brut pour fonctionner avec /<alpha>.    */
+/* THÈME VISUEL — version DOUCE (violet « nebula », thème unique)       */
+/* Teintes désaturées et éclaircies, faible contraste, aucun noir/blanc */
+/* pur. Les couleurs restent en RGB brut pour fonctionner avec /<alpha>.*/
 /* ------------------------------------------------------------------ */
 :root,
 [data-theme='nebula'] {
@@ -22,45 +21,6 @@
   --ink-soft: 165 161 192;
   --bg-from: #1b1a2b;
   --bg-to: #15141f;
-}
-
-[data-theme='inferno'] {
-  --neon-primary: 224 162 138;   /* terracotta douce */
-  --neon-secondary: 214 178 150; /* sable            */
-  --neon-accent: 220 158 150;    /* corail poussiéreux */
-  --surface: 36 28 26;
-  --surface-soft: 51 40 37;
-  --surface-ring: 128 100 90;
-  --ink: 244 235 230;
-  --ink-soft: 196 174 164;
-  --bg-from: #241c1a;
-  --bg-to: #1b1513;
-}
-
-[data-theme='matrix'] {
-  --neon-primary: 148 188 158;   /* sauge douce  */
-  --neon-secondary: 138 184 176; /* sarcelle feutré */
-  --neon-accent: 188 200 150;    /* olive tendre */
-  --surface: 24 33 30;
-  --surface-soft: 35 47 43;
-  --surface-ring: 90 122 108;
-  --ink: 232 242 236;
-  --ink-soft: 158 184 172;
-  --bg-from: #19231f;
-  --bg-to: #131b18;
-}
-
-[data-theme='vapor'] {
-  --neon-primary: 196 168 214;   /* mauve poussiéreux */
-  --neon-secondary: 158 178 210; /* bleu poudré       */
-  --neon-accent: 214 178 196;    /* rose pâle         */
-  --surface: 30 30 40;
-  --surface-soft: 43 43 56;
-  --surface-ring: 110 108 132;
-  --ink: 236 234 244;
-  --ink-soft: 172 170 192;
-  --bg-from: #20202c;
-  --bg-to: #18181f;
 }
 
 * {
