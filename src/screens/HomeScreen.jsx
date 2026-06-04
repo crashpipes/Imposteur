@@ -4,7 +4,7 @@ import { useGame } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import { CATEGORIES } from '../data/wordPairs.js'
-import DetectiveLogo from '../components/DetectiveLogo.jsx'
+import detectiveUrl from '../assets/detective.svg'
 import NeonButton from '../components/ui/NeonButton.jsx'
 import GlowCard from '../components/ui/GlowCard.jsx'
 
@@ -26,17 +26,24 @@ export default function HomeScreen() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center">
-      {/* Emblème détective (recoloré par le thème) */}
+      {/* Emblème détective (ton image). Le halo autour reprend la couleur du thème. */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 200, damping: 18 }}
         className="mb-4"
       >
-        <DetectiveLogo className="h-44 w-44 drop-shadow-[0_12px_45px_rgba(0,0,0,0.5)] sm:h-52 sm:w-52" />
+        <img
+          src={detectiveUrl}
+          alt="Imposteur — détective"
+          width="208"
+          height="208"
+          className="h-44 w-44 rounded-full sm:h-52 sm:w-52"
+          style={{ filter: 'drop-shadow(0 0 30px rgb(var(--neon-primary) / 0.45))' }}
+        />
       </motion.div>
 
-      {/* Titre */}
+      {/* Titre (se recolore avec le thème) */}
       <motion.h1
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
