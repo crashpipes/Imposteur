@@ -40,6 +40,7 @@ export const CATEGORIES = {
   personnages: { id: 'personnages', label: 'Personnages fictifs', icon: '🦸' },
   personnalites: { id: 'personnalites', label: 'Personnalités publiques', icon: '🌟' },
   pokemon: { id: 'pokemon', label: 'Pokémon', icon: '⚡' },
+  lol: { id: 'lol', label: 'League of Legends', icon: '⚔️' },
   pays: { id: 'pays', label: 'Pays', icon: '🌍' },
   objets: { id: 'objets', label: 'Objets', icon: '🧰' },
   nourriture: { id: 'nourriture', label: 'Nourriture', icon: '🍔' },
@@ -314,6 +315,54 @@ export const WORD_DATA = {
     { a: 'Dracaufeu', b: 'Tortank', link: 'Starters finaux rivaux' },
     { a: 'Otaria', b: 'Lamantine', link: 'Phoques' },
     { a: 'Kokiyas', b: 'Crustabri', link: 'Coquillages' },
+  ],
+
+  // ------------------------------------------------------------------
+  // LEAGUE OF LEGENDS : champions (rôle, lore, ressemblance) + éléments
+  // du jeu (régions, objectifs, sorts, rangs...).
+  // ------------------------------------------------------------------
+  lol: [
+    // Champions
+    { a: 'Garen', b: 'Darius', link: 'Bruisers top : Demacia contre Noxus' },
+    { a: 'Yasuo', b: 'Yone', link: 'Frères bretteurs', hardcore: true },
+    { a: 'Zed', b: 'Shen', link: 'Ninjas, anciens frères du Kinkou' },
+    { a: 'Zed', b: 'Kayn', link: 'Maître et élève' },
+    { a: 'Jinx', b: 'Vi', link: 'Sœurs (Arcane)' },
+    { a: 'Caitlyn', b: 'Vi', link: 'Duo de la police de Piltover' },
+    { a: 'Lux', b: 'Garen', link: 'Frère et sœur Crownguard' },
+    { a: 'Darius', b: 'Draven', link: 'Frères de Noxus' },
+    { a: 'Nasus', b: 'Renekton', link: 'Frères de Shurima', hardcore: true },
+    { a: 'Xayah', b: 'Rakan', link: 'Couple Vastaya' },
+    { a: 'Leona', b: 'Diana', link: 'Soleil contre Lune' },
+    { a: 'Kayle', b: 'Morgana', link: 'Sœurs jumelles', hardcore: true },
+    { a: 'Aatrox', b: 'Varus', link: 'Darkins' },
+    { a: "Cho'Gath", b: "Kog'Maw", link: 'Créatures du Néant' },
+    { a: "Kha'Zix", b: "Rek'Sai", link: 'Créatures du Néant', hardcore: true },
+    { a: 'Teemo', b: 'Tristana', link: 'Yordles de Bandle' },
+    { a: 'Veigar', b: 'Lulu', link: 'Yordles mages' },
+    { a: 'Master Yi', b: 'Wukong', link: 'Maître et disciple' },
+    { a: 'Pyke', b: 'Gangplank', link: 'Pirates de Bilgewater' },
+    { a: 'Twisted Fate', b: 'Graves', link: 'Vieux duo de Bilgewater' },
+    { a: 'Senna', b: 'Lucian', link: 'Couple de chasseurs' },
+    { a: 'Ashe', b: 'Sejuani', link: 'Reines rivales du Freljord' },
+    { a: 'Volibear', b: 'Ornn', link: 'Demi-dieux frères du Freljord' },
+    { a: 'Viktor', b: 'Jayce', link: 'Rivaux de Piltover/Zaun (Arcane)' },
+    { a: 'Heimerdinger', b: 'Ziggs', link: 'Yordles inventeurs explosifs' },
+    { a: 'Ahri', b: 'Evelynn', link: 'Séductrices mortelles' },
+    { a: 'Lee Sin', b: 'Udyr', link: 'Moines au corps-à-corps' },
+    { a: 'Soraka', b: 'Sona', link: 'Supports soigneuses' },
+
+    // Hors champions : régions, objectifs, sorts, rangs
+    { a: 'Demacia', b: 'Noxus', link: 'Royaumes rivaux' },
+    { a: 'Piltover', b: 'Zaun', link: 'Cités jumelles (haut et bas)' },
+    { a: 'Baron Nashor', b: 'Dragon', link: 'Objectifs épiques' },
+    { a: 'Dragon', b: 'Héraut de la Faille', link: 'Objectifs de la jungle' },
+    { a: 'Nexus', b: 'Inhibiteur', link: 'Structures à détruire' },
+    { a: 'Flash', b: 'Téléportation', link: "Sorts d'invocateur" },
+    { a: 'Smite', b: 'Flash', link: "Sorts d'invocateur" },
+    { a: 'Gromp', b: 'Krug', link: 'Camps de jungle' },
+    { a: 'Fer', b: 'Bronze', link: 'Rangs les plus bas', hardcore: true },
+    { a: 'Diamant', b: 'Maître', link: 'Hauts rangs' },
   ],
 
   // ------------------------------------------------------------------

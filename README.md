@@ -66,11 +66,11 @@ partie, et **remis à zéro** uniquement au retour au menu d'accueil.
 - **Timer** — minuteur de discussion qui se réinitialise à chaque joueur.
 - **Plusieurs imposteurs** — réglable selon le nombre de joueurs.
 
-## Catégories (295 duos)
+## Catégories (333 duos)
 
 Films · Séries · Anime · Jeux vidéo · Personnages fictifs · **Personnalités
-publiques** · **Pokémon** · Pays · Objets · Nourriture · Animaux — plus le
-**Mélange aléatoire** qui pioche dans tout.
+publiques** · **Pokémon** · **League of Legends** · Pays · Objets · Nourriture ·
+Animaux — plus le **Mélange aléatoire** qui pioche dans tout.
 
 Les liens entre deux mots ne sont pas que « même univers » : on s'appuie aussi
 sur la **ressemblance physique** (Gojo / Kakashi), le **comportement / archétype**
