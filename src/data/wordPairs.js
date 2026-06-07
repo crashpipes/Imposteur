@@ -50,6 +50,20 @@ export const CATEGORIES = {
 
 export const WORD_DATA = {
   anime: [
+    // --- Ajouts : ressemblances variées (cross-univers) ---
+    { a: 'Saitama', aFrom: 'One Punch Man', b: 'All Might', bFrom: 'My Hero Academia', link: 'Héros au grand sourire qui écrasent tout' },
+    { a: 'Vegeta', aFrom: 'Dragon Ball', b: 'Bakugo', bFrom: 'My Hero Academia', link: 'Rivaux explosifs et orgueilleux' },
+    { a: 'Sukuna', aFrom: 'Jujutsu Kaisen', b: 'Hisoka', bFrom: 'Hunter x Hunter', link: 'Antagonistes accros au combat' },
+    { a: 'Muzan', aFrom: 'Demon Slayer', b: 'Dio', bFrom: "JoJo's Bizarre Adventure", link: 'Vampires élégants et tyranniques' },
+    { a: 'Frieza', aFrom: 'Dragon Ball', b: 'Meruem', bFrom: 'Hunter x Hunter', link: 'Tyrans hautains au sommet de leur espèce' },
+    { a: 'Gintoki', aFrom: 'Gintama', b: 'Ichigo', bFrom: 'Bleach', link: 'Bretteurs nonchalants aux cheveux clairs' },
+    { a: 'Escanor', aFrom: 'Seven Deadly Sins', b: 'Saitama', bFrom: 'One Punch Man', link: 'Un seul coup leur suffit' },
+    { a: 'Meliodas', aFrom: 'Seven Deadly Sins', b: 'Asta', bFrom: 'Black Clover', link: 'Petits gabarits aux pouvoirs sombres' },
+    { a: 'Sung Jin-Woo', aFrom: 'Solo Leveling', b: 'Sasuke', bFrom: 'Naruto', link: 'Bruns ténébreux devenus surpuissants' },
+    { a: 'All Might', aFrom: 'My Hero Academia', b: 'Superman', bFrom: 'DC Comics', link: 'Symboles de justice rassurants' },
+    { a: 'Tanjiro', aFrom: 'Demon Slayer', b: 'Deku', bFrom: 'My Hero Academia', link: 'Héros gentils et acharnés' },
+    { a: 'Zoro', aFrom: 'One Piece', b: 'Mihawk', bFrom: 'One Piece', link: 'Sabreurs : élève et maître ultime' },
+
     // --- Mêmes univers ---
     { a: 'Naruto', aFrom: 'Naruto', b: 'Sasuke', bFrom: 'Naruto', hardcore: true },
     { a: 'Luffy', aFrom: 'One Piece', b: 'Zoro', bFrom: 'One Piece' },
@@ -150,6 +164,24 @@ export const WORD_DATA = {
   ],
 
   jeux: [
+    // --- Ajouts : personnages (ressemblances variées) ---
+    { a: 'Lara Croft', aFrom: 'Tomb Raider', b: 'Nathan Drake', bFrom: 'Uncharted', link: 'Pilleurs de tombes acrobates' },
+    { a: 'Bowser', aFrom: 'Super Mario', b: 'Ganondorf', bFrom: 'The Legend of Zelda', link: 'Méchants qui kidnappent la princesse' },
+    { a: 'Peach', aFrom: 'Super Mario', b: 'Zelda', bFrom: 'The Legend of Zelda', link: 'Princesses à secourir' },
+    { a: 'Pac-Man', aFrom: 'Arcade', b: 'Kirby', bFrom: 'Nintendo', link: 'Ronds tout mignons qui avalent tout' },
+    { a: 'Kratos', aFrom: 'God of War', b: 'Geralt', bFrom: 'The Witcher', link: 'Pères bourrus et guerriers' },
+    { a: '2B', aFrom: 'NieR Automata', b: 'Bayonetta', bFrom: 'Bayonetta', link: 'Combattantes élégantes en noir' },
+    { a: 'Ezio', aFrom: "Assassin's Creed", b: 'Corvo', bFrom: 'Dishonored', link: 'Assassins encapuchonnés et agiles' },
+    { a: 'Gordon Freeman', aFrom: 'Half-Life', b: 'Isaac Clarke', bFrom: 'Dead Space', link: 'Héros muets en combinaison' },
+    // --- Ajouts : jeux (ressemblances variées) ---
+    { a: 'Stardew Valley', b: 'Animal Crossing', link: 'Vie tranquille et farming relaxant' },
+    { a: 'Terraria', b: 'Minecraft', link: "Bac à sable où l'on creuse et construit" },
+    { a: 'Stumble Guys', b: 'Fall Guys', link: 'Battle royale de petits persos rigolos' },
+    { a: 'Subway Surfers', b: 'Temple Run', link: 'Courses sans fin sur mobile' },
+    { a: 'Among Us', b: 'Goose Goose Duck', link: "Trouver l'imposteur dans l'équipage" },
+    { a: 'Skyrim', b: 'The Witcher 3', link: 'RPG médiévaux en monde ouvert' },
+    { a: 'Hades', b: 'Dead Cells', link: 'Rogue-lites nerveux et stylés' },
+    { a: 'Clash Royale', b: 'Clash of Clans', link: 'Univers Supercell' },
     { a: 'Mario', aFrom: 'Super Mario (Nintendo)', b: 'Luigi', bFrom: 'Super Mario (Nintendo)', hardcore: true },
     { a: 'Sonic', aFrom: 'Sonic (Sega)', b: 'Shadow', bFrom: 'Sonic (Sega)', hardcore: true },
     { a: 'Mario', aFrom: 'Super Mario (Nintendo)', b: 'Sonic', bFrom: 'Sonic (Sega)', link: 'Mascottes rivales du jeu vidéo' },
@@ -391,6 +423,20 @@ export const WORD_DATA = {
   ],
 
   objets: [
+    // --- Ajouts : ressemblances de forme / fonction ---
+    { a: 'Fourchette', b: 'Râteau', link: 'Des dents alignées' },
+    { a: 'Brosse à dents', b: 'Pinceau', link: 'Un manche avec des poils au bout' },
+    { a: 'Aimant', b: 'Fer à cheval', link: 'Forme en U' },
+    { a: 'Bouée', b: 'Donut', link: 'Ronds avec un trou au milieu' },
+    { a: 'CD', b: 'Vinyle', link: 'Disques de musique' },
+    { a: 'Sablier', b: 'Horloge', link: 'Mesurent le temps' },
+    { a: 'Échelle', b: 'Escalier', link: 'Pour monter' },
+    { a: 'Clé', b: 'Tournevis', link: "Des objets qu'on tourne" },
+    { a: 'Cadenas', b: 'Serrure', link: 'Se ferment à clé' },
+    { a: 'Miroir', b: 'Fenêtre', link: 'Surfaces de verre encadrées' },
+    { a: 'Ballon', b: 'Globe terrestre', link: 'Sphères' },
+    { a: 'Pile', b: 'Batterie', link: "Stockent de l'énergie" },
+    { a: 'Bouclier', b: 'Couvercle', link: "Un disque qu'on tient pour se protéger" },
     { a: 'Épée', b: 'Katana', link: 'Armes blanches' },
     { a: 'Guitare', b: 'Banjo', link: 'Instruments à cordes pincées' },
     { a: 'Violon', b: 'Alto', link: 'Instruments à cordes frottées', hardcore: true },

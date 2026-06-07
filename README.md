@@ -66,7 +66,7 @@ partie, et **remis à zéro** uniquement au retour au menu d'accueil.
 - **Timer** — minuteur de discussion qui se réinitialise à chaque joueur.
 - **Plusieurs imposteurs** — réglable selon le nombre de joueurs.
 
-## Catégories (333 duos)
+## Catégories (374 duos)
 
 Films · Séries · Anime · Jeux vidéo · Personnages fictifs · **Personnalités
 publiques** · **Pokémon** · **League of Legends** · Pays · Objets · Nourriture ·
