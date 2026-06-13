@@ -32,7 +32,8 @@ export function decodeCard(param) {
 }
 
 // Construit l'URL complète de la carte (basée sur l'URL actuelle du site).
-export function cardUrl(role) {
+// `lang` permet d'afficher la page « carte » du téléphone dans la bonne langue.
+export function cardUrl(role, lang = 'fr') {
   const base = window.location.origin + window.location.pathname
-  return `${base}?card=${encodeCard(role)}`
+  return `${base}?card=${encodeCard(role)}&lang=${lang}`
 }

@@ -14,8 +14,9 @@
  * ----------------------------------------------------------------------------
  */
 
-import { createContext, useContext, useEffect, useMemo, useReducer } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from 'react'
 import { generateRound } from '../lib/wordGenerator.js'
+import { translate, categoryLabel, dateLocale } from '../lib/i18n.js'
 import {
   loadSettings,
   saveSettings,
@@ -157,6 +158,11 @@ export function GameProvider({ children }) {
     document.documentElement.setAttribute('data-theme', state.settings.theme)
   }, [state.settings.theme])
 
+  // Reflète la langue de l'interface sur l'attribut <html lang>.
+  useEffect(() => {
+    document.documentElement.setAttribute('lang', state.settings.lang || 'fr')
+  }, [state.settings.lang])
+
   const value = useMemo(() => ({ state, dispatch }), [state])
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>
 }
@@ -165,6 +171,29 @@ export function useGame() {
   const ctx = useContext(GameContext)
   if (!ctx) throw new Error('useGame doit etre utilise dans <GameProvider>')
   return ctx
+}
+
+/**
+ * Hook de traduction lié à la langue courante (state.settings.lang).
+ * Renvoie :
+ *   - t(key, vars) : chaîne traduite (avec interpolation {var})
+ *   - tCat(id)     : libellé de catégorie traduit
+ *   - lang         : langue active ('fr' | 'en')
+ *   - locale       : locale de date ('fr-FR' | 'en-US')
+ *   - toggleLang() : bascule FR <-> EN
+ */
+export function useT() {
+  const { state, dispatch } = useGame()
+  const lang = state.settings.lang || 'fr'
+
+  const t = useCallback((key, vars) => translate(lang, key, vars), [lang])
+  const tCat = useCallback((id) => categoryLabel(lang, id), [lang])
+  const toggleLang = useCallback(
+    () => dispatch({ type: 'UPDATE_SETTINGS', patch: { lang: lang === 'fr' ? 'en' : 'fr' } }),
+    [dispatch, lang],
+  )
+
+  return { t, tCat, lang, locale: dateLocale(lang), toggleLang }
 }
 
 export { defaultSettings }

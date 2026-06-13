@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useGame } from '../store/gameStore.jsx'
+import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import { CATEGORIES, WORD_DATA, totalPairs } from '../data/wordPairs.js'
@@ -25,10 +25,10 @@ function buildAllPairs() {
   return [...custom, ...base] // cartes perso en premier
 }
 
-function linkLabel(p) {
+function linkLabel(p, t) {
   if (p.link) return p.link
-  if (p.aFrom && p.bFrom && p.aFrom === p.bFrom) return 'Même univers'
-  return 'Mots proches'
+  if (p.aFrom && p.bFrom && p.aFrom === p.bFrom) return t('lib.sameUniverse')
+  return t('lib.closeWords')
 }
 
 function norm(s) {
@@ -39,6 +39,7 @@ const emptyForm = { category: 'anime', a: '', aFrom: '', b: '', bFrom: '', link:
 
 export default function LibraryScreen() {
   const { dispatch } = useGame()
+  const { t, tCat } = useT()
   const play = usePlay()
 
   const [query, setQuery] = useState('')
@@ -74,11 +75,11 @@ export default function LibraryScreen() {
       if (cat !== 'all' && p.category !== cat) return false
       if (!q) return true
       const hay = norm(
-        [p.a, p.b, p.aFrom, p.bFrom, p.link, CATEGORIES[p.category]?.label].join(' '),
+        [p.a, p.b, p.aFrom, p.bFrom, p.link, tCat(p.category)].join(' '),
       )
       return hay.includes(q)
     })
-  }, [allPairs, query, cat])
+  }, [allPairs, query, cat, tCat])
 
   const counts = useMemo(() => {
     const c = { all: allPairs.length }
@@ -100,7 +101,7 @@ export default function LibraryScreen() {
       }
       play('win')
     } else {
-      setPwError('Mot de passe incorrect.')
+      setPwError(t('lib.wrongPassword'))
       play('lose')
     }
   }
@@ -118,7 +119,7 @@ export default function LibraryScreen() {
 
   const submitCard = () => {
     if (!form.a.trim() || !form.b.trim()) {
-      setPwError('Il faut au moins les deux mots (Mot A et Mot B).')
+      setPwError(t('lib.errorTwoWords'))
       play('lose')
       return
     }
@@ -149,15 +150,14 @@ export default function LibraryScreen() {
     <div className="mx-auto max-w-5xl px-6 py-12">
       <div className="mb-6 flex items-center justify-between">
         <button onClick={back} className="text-sm text-ink-soft transition hover:text-ink">
-          ← Accueil
+          {t('lib.back')}
         </button>
-        <h2 className="font-display text-2xl font-bold neon-text">📚 Bibliothèque</h2>
+        <h2 className="font-display text-2xl font-bold neon-text">{t('lib.title')}</h2>
         <div className="w-16" />
       </div>
 
       <p className="mb-6 text-center text-ink-soft">
-        Toutes les cartes du jeu : {totalPairs()} duos, classés par catégorie.
-        Chaque paire indique pourquoi les deux mots sont liés.
+        {t('lib.intro', { n: totalPairs() })}
       </p>
 
       {/* Recherche + bouton créer */}
@@ -165,7 +165,7 @@ export default function LibraryScreen() {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Rechercher un mot, un univers, un lien…"
+          placeholder={t('lib.searchPlaceholder')}
           className="w-full rounded-2xl border border-white/15 bg-surface/60 px-5 py-3 text-ink outline-none transition placeholder:text-ink-soft/50 focus:border-neon-primary focus:shadow-glow-soft"
         />
         <NeonButton
@@ -173,7 +173,7 @@ export default function LibraryScreen() {
           onClick={() => { play('click'); setShowCreate((s) => !s); setPwError('') }}
           className="shrink-0"
         >
-          ➕ Créer une carte
+          {t('lib.createCard')}
         </NeonButton>
       </div>
 
@@ -191,7 +191,7 @@ export default function LibraryScreen() {
                 <div className="flex flex-col items-center gap-3 text-center">
                   <div className="text-3xl">🔒</div>
                   <p className="text-sm text-ink-soft">
-                    Création réservée. Entre le mot de passe pour débloquer.
+                    {t('lib.locked')}
                   </p>
                   <div className="flex w-full max-w-sm gap-2">
                     <input
@@ -199,25 +199,25 @@ export default function LibraryScreen() {
                       value={pw}
                       onChange={(e) => setPw(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && tryUnlock()}
-                      placeholder="Mot de passe"
+                      placeholder={t('lib.passwordPlaceholder')}
                       className="w-full rounded-xl border border-white/15 bg-surface/60 px-4 py-2.5 text-ink outline-none focus:border-neon-primary"
                     />
-                    <NeonButton size="sm" onClick={tryUnlock}>Déverrouiller</NeonButton>
+                    <NeonButton size="sm" onClick={tryUnlock}>{t('lib.unlock')}</NeonButton>
                   </div>
                   {pwError && <p className="text-sm text-rose-400">{pwError}</p>}
                 </div>
               ) : (
                 <div>
                   <div className="mb-4 flex items-center justify-between">
-                    <h3 className="font-display text-lg font-semibold">➕ Nouvelle carte</h3>
+                    <h3 className="font-display text-lg font-semibold">{t('lib.newCard')}</h3>
                     <button onClick={lock} className="text-xs text-ink-soft hover:text-ink">
-                      🔒 Verrouiller
+                      {t('lib.lock')}
                     </button>
                   </div>
 
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <label className="text-sm">
-                      <span className="mb-1 block text-ink-soft">Catégorie</span>
+                      <span className="mb-1 block text-ink-soft">{t('lib.category')}</span>
                       <select
                         value={form.category}
                         onChange={setF('category')}
@@ -225,46 +225,45 @@ export default function LibraryScreen() {
                       >
                         {PICKABLE.map((c) => (
                           <option key={c.id} value={c.id} className="bg-surface text-ink">
-                            {c.icon} {c.label}
+                            {c.icon} {tCat(c.id)}
                           </option>
                         ))}
                       </select>
                     </label>
                     <label className="text-sm">
-                      <span className="mb-1 block text-ink-soft">Lien (optionnel)</span>
-                      <Input value={form.link} onChange={setF('link')} placeholder="ex. Se ressemblent" />
+                      <span className="mb-1 block text-ink-soft">{t('lib.link')}</span>
+                      <Input value={form.link} onChange={setF('link')} placeholder={t('lib.linkPlaceholder')} />
                     </label>
 
                     <label className="text-sm">
-                      <span className="mb-1 block text-ink-soft">Mot A *</span>
-                      <Input value={form.a} onChange={setF('a')} placeholder="ex. Pikachu" />
+                      <span className="mb-1 block text-ink-soft">{t('lib.wordA')}</span>
+                      <Input value={form.a} onChange={setF('a')} placeholder={t('lib.wordAPlaceholder')} />
                     </label>
                     <label className="text-sm">
-                      <span className="mb-1 block text-ink-soft">Univers A (optionnel)</span>
-                      <Input value={form.aFrom} onChange={setF('aFrom')} placeholder="ex. Pokémon" />
+                      <span className="mb-1 block text-ink-soft">{t('lib.universeA')}</span>
+                      <Input value={form.aFrom} onChange={setF('aFrom')} placeholder={t('lib.universeAPlaceholder')} />
                     </label>
 
                     <label className="text-sm">
-                      <span className="mb-1 block text-ink-soft">Mot B *</span>
-                      <Input value={form.b} onChange={setF('b')} placeholder="ex. Raichu" />
+                      <span className="mb-1 block text-ink-soft">{t('lib.wordB')}</span>
+                      <Input value={form.b} onChange={setF('b')} placeholder={t('lib.wordBPlaceholder')} />
                     </label>
                     <label className="text-sm">
-                      <span className="mb-1 block text-ink-soft">Univers B (optionnel)</span>
-                      <Input value={form.bFrom} onChange={setF('bFrom')} placeholder="ex. Pokémon" />
+                      <span className="mb-1 block text-ink-soft">{t('lib.universeB')}</span>
+                      <Input value={form.bFrom} onChange={setF('bFrom')} placeholder={t('lib.universeAPlaceholder')} />
                     </label>
                   </div>
 
                   {pwError && <p className="mt-3 text-sm text-rose-400">{pwError}</p>}
                   {justAdded && (
-                    <p className="mt-3 text-sm text-emerald-400">✓ Carte ajoutée : {justAdded}</p>
+                    <p className="mt-3 text-sm text-emerald-400">{t('lib.cardAdded', { x: justAdded })}</p>
                   )}
 
                   <div className="mt-4 flex justify-end">
-                    <NeonButton size="sm" onClick={submitCard}>Ajouter la carte</NeonButton>
+                    <NeonButton size="sm" onClick={submitCard}>{t('lib.addCard')}</NeonButton>
                   </div>
                   <p className="mt-3 text-xs text-ink-soft/70">
-                    Les cartes créées sont enregistrées dans ce navigateur et entrent
-                    directement dans le jeu et la bibliothèque.
+                    {t('lib.createNote')}
                   </p>
                 </div>
               )}
@@ -276,18 +275,18 @@ export default function LibraryScreen() {
       {/* Filtres par catégorie */}
       <div className="mb-8 flex flex-wrap gap-2">
         <Chip active={cat === 'all'} onClick={() => { play('click'); setCat('all') }}>
-          🎲 Toutes <span className="opacity-60">({counts.all})</span>
+          {t('lib.all')} <span className="opacity-60">({counts.all})</span>
         </Chip>
         {PICKABLE.map((c) => (
           <Chip key={c.id} active={cat === c.id} onClick={() => { play('click'); setCat(c.id) }}>
-            {c.icon} {c.label} <span className="opacity-60">({counts[c.id] || 0})</span>
+            {c.icon} {tCat(c.id)} <span className="opacity-60">({counts[c.id] || 0})</span>
           </Chip>
         ))}
       </div>
 
       {/* Grille des cartes */}
       {filtered.length === 0 ? (
-        <p className="py-12 text-center text-ink-soft">Aucune carte ne correspond à « {query} ».</p>
+        <p className="py-12 text-center text-ink-soft">{t('lib.noMatch', { query })}</p>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
@@ -295,23 +294,23 @@ export default function LibraryScreen() {
               <GlowCard glow={false} className="relative h-full p-4">
                 <div className="mb-2 flex items-center justify-between">
                   <span className="text-xs text-ink-soft">
-                    {CATEGORIES[p.category]?.icon} {CATEGORIES[p.category]?.label}
+                    {CATEGORIES[p.category]?.icon} {tCat(p.category)}
                   </span>
                   <div className="flex items-center gap-2">
                     {p.custom && (
                       <span className="rounded-full bg-neon-secondary/15 px-2 py-0.5 text-[10px] font-semibold text-neon-secondary">
-                        ✏️ perso
+                        {t('lib.custom')}
                       </span>
                     )}
                     {p.hardcore && (
                       <span className="rounded-full bg-rose-500/15 px-2 py-0.5 text-[10px] font-semibold text-rose-300">
-                        🔥 très proche
+                        {t('lib.hardcore')}
                       </span>
                     )}
                     {p.custom && unlocked && (
                       <button
                         onClick={() => deleteCustom(p.id)}
-                        title="Supprimer cette carte"
+                        title={t('lib.deleteCard')}
                         className="text-ink-soft transition hover:text-rose-400"
                       >
                         ✕
@@ -327,7 +326,7 @@ export default function LibraryScreen() {
                 </div>
 
                 <div className="mt-3 border-t border-white/10 pt-2 text-center text-xs text-ink-soft">
-                  🔗 {linkLabel(p)}
+                  🔗 {linkLabel(p, t)}
                 </div>
               </GlowCard>
             </motion.div>

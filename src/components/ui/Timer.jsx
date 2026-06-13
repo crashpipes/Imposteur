@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useT } from '../../store/gameStore.jsx'
 import NeonButton from './NeonButton.jsx'
 
 /**
@@ -9,6 +10,7 @@ import NeonButton from './NeonButton.jsx'
  * onTick(secondsLeft) permet de jouer un son par seconde dans les dernières.
  */
 export default function Timer({ seconds = 180, onTick, onEnd }) {
+  const { t } = useT()
   const [left, setLeft] = useState(seconds)
   const [running, setRunning] = useState(true)
   const ref = useRef(null)
@@ -72,10 +74,10 @@ export default function Timer({ seconds = 180, onTick, onEnd }) {
 
       <div className="flex gap-3">
         <NeonButton size="sm" variant="secondary" onClick={() => setRunning((r) => !r)}>
-          {running ? '⏸ Pause' : '▶ Reprendre'}
+          {running ? t('timer.pause') : t('timer.resume')}
         </NeonButton>
         <NeonButton size="sm" variant="ghost" onClick={() => { setLeft(seconds); setRunning(true) }}>
-          ↺ Reset
+          {t('timer.reset')}
         </NeonButton>
       </div>
     </div>

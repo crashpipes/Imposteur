@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useGame } from '../store/gameStore.jsx'
+import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { CATEGORIES } from '../data/wordPairs.js'
 import NeonButton from '../components/ui/NeonButton.jsx'
@@ -8,6 +8,7 @@ import GlowCard from '../components/ui/GlowCard.jsx'
 
 export default function SetupScreen() {
   const { state, dispatch } = useGame()
+  const { t, tCat } = useT()
   const play = usePlay()
   const { config, settings } = state
   const [error, setError] = useState('')
@@ -52,7 +53,7 @@ export default function SetupScreen() {
 
   const launch = () => {
     if (validPlayers.length < 3) {
-      setError('Il faut au moins 3 joueurs pour lancer une partie.')
+      setError(t('setup.errorMinPlayers'))
       play('lose')
       return
     }
@@ -71,15 +72,15 @@ export default function SetupScreen() {
           onClick={() => { play('click'); dispatch({ type: 'NEW_GAME' }) }}
           className="text-sm text-ink-soft transition hover:text-ink"
         >
-          ← Accueil
+          {t('setup.back')}
         </button>
-        <h2 className="font-display text-2xl font-bold neon-text">Configuration</h2>
+        <h2 className="font-display text-2xl font-bold neon-text">{t('setup.title')}</h2>
         <div className="w-16" />
       </div>
 
       {/* JOUEURS */}
       <GlowCard className="mb-6 p-6">
-        <SectionTitle icon="👥" title="Joueurs" hint={`${validPlayers.length} prêts`} />
+        <SectionTitle icon="👥" title={t('setup.playersTitle')} hint={t('setup.playersHint', { n: validPlayers.length })} />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <AnimatePresence initial={false}>
             {config.players.map((p, i) => (
@@ -97,7 +98,7 @@ export default function SetupScreen() {
                 <input
                   value={p}
                   onChange={(e) => setPlayer(i, e.target.value)}
-                  placeholder={`Joueur ${i + 1}`}
+                  placeholder={t('setup.playerPlaceholder', { n: i + 1 })}
                   maxLength={18}
                   className="w-full rounded-xl border border-white/10 bg-surface/60 px-4 py-2.5 text-ink outline-none transition placeholder:text-ink-soft/50 focus:border-neon-primary focus:shadow-glow-soft"
                 />
@@ -117,13 +118,13 @@ export default function SetupScreen() {
           onClick={addPlayer}
           className="mt-4 w-full rounded-xl border border-dashed border-white/20 py-2.5 text-sm text-ink-soft transition hover:border-neon-primary hover:text-ink"
         >
-          + Ajouter un joueur
+          {t('setup.addPlayer')}
         </button>
       </GlowCard>
 
       {/* IMPOSTEURS */}
       <GlowCard className="mb-6 p-6">
-        <SectionTitle icon="🕵️" title="Imposteurs" hint={`max ${maxImpostors}`} />
+        <SectionTitle icon="🕵️" title={t('setup.impostorsTitle')} hint={t('setup.impostorsHint', { n: maxImpostors })} />
         <div className="flex flex-wrap gap-3">
           {Array.from({ length: maxImpostors }, (_, i) => i + 1).map((n) => (
             <button
@@ -143,10 +144,9 @@ export default function SetupScreen() {
 
       {/* NOMBRE DE TOURS */}
       <GlowCard className="mb-6 p-6">
-        <SectionTitle icon="🔁" title="Tours de parole" hint="avant le vote" />
+        <SectionTitle icon="🔁" title={t('setup.toursTitle')} hint={t('setup.toursHint')} />
         <p className="mb-4 text-sm text-ink-soft">
-          Chaque joueur parle chacun son tour. Choisis combien de fois on fait le
-          tour de la table.
+          {t('setup.toursDesc')}
         </p>
         <div className="flex flex-wrap gap-3">
           {[1, 2, 3, 4, 5].map((n) => (
@@ -167,7 +167,7 @@ export default function SetupScreen() {
 
       {/* CATÉGORIES */}
       <GlowCard className="mb-6 p-6">
-        <SectionTitle icon="🗂️" title="Catégories" />
+        <SectionTitle icon="🗂️" title={t('setup.categoriesTitle')} />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {Object.values(CATEGORIES).map((c) => {
             const active = config.categories.includes(c.id)
@@ -181,7 +181,7 @@ export default function SetupScreen() {
                     : 'border-white/10 bg-surface/40 text-ink-soft hover:border-white/30'
                 }`}
               >
-                <span className="text-lg">{c.icon}</span> {c.label}
+                <span className="text-lg">{c.icon}</span> {tCat(c.id)}
               </button>
             )
           })}
@@ -190,11 +190,11 @@ export default function SetupScreen() {
 
       {/* OPTIONS */}
       <GlowCard className="mb-8 p-6">
-        <SectionTitle icon="⚙️" title="Options" />
+        <SectionTitle icon="⚙️" title={t('setup.optionsTitle')} />
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <Toggle label="⏱️ Timer" desc="Minuteur de discussion" value={settings.timer} onChange={() => flip('timer')} />
-          <Toggle label="🕵️ Mode Mr. White" desc="L'imposteur n'a aucun mot" value={config.mrWhite} onChange={() => flipConfig('mrWhite')} />
-          <Toggle label="📱 Mode QR code" desc="Les joueurs scannent leur mot" value={config.qrMode} onChange={() => flipConfig('qrMode')} />
+          <Toggle label={t('setup.timer')} desc={t('setup.timerDesc')} value={settings.timer} onChange={() => flip('timer')} />
+          <Toggle label={t('setup.mrWhite')} desc={t('setup.mrWhiteDesc')} value={config.mrWhite} onChange={() => flipConfig('mrWhite')} />
+          <Toggle label={t('setup.qr')} desc={t('setup.qrDesc')} value={config.qrMode} onChange={() => flipConfig('qrMode')} />
         </div>
       </GlowCard>
 
@@ -210,7 +210,7 @@ export default function SetupScreen() {
 
       <div className="flex justify-center">
         <NeonButton size="xl" onClick={launch} disabled={validPlayers.length < 3}>
-          🎲 Lancer la partie
+          {t('setup.launch')}
         </NeonButton>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useGame } from '../store/gameStore.jsx'
+import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import { shuffle } from '../lib/wordGenerator.js'
@@ -10,6 +10,7 @@ import Timer from '../components/ui/Timer.jsx'
 
 export default function DiscussionScreen() {
   const { state, dispatch } = useGame()
+  const { t } = useT()
   const play = usePlay()
   const { round, settings, config } = state
 
@@ -58,10 +59,10 @@ export default function DiscussionScreen() {
   return (
     <div className="mx-auto flex min-h-screen max-w-3xl flex-col items-center px-6 py-12">
       <div className="mb-2 text-center text-sm uppercase tracking-[0.4em] text-ink-soft">
-        Phase de discussion
+        {t('disc.eyebrow')}
       </div>
       <h2 className="mb-6 text-center font-display text-4xl font-bold neon-text">
-        Chacun son tour 🎤
+        {t('disc.title')}
       </h2>
 
       {/* Compteur de tours */}
@@ -77,7 +78,7 @@ export default function DiscussionScreen() {
                   : 'bg-white/5 text-ink-soft'
             }`}
           >
-            Tour {i + 1}
+            {t('disc.tour', { n: i + 1 })}
           </span>
         ))}
       </div>
@@ -95,7 +96,7 @@ export default function DiscussionScreen() {
             >
               <GlowCard className="p-8 text-center">
                 <div className="text-xs uppercase tracking-[0.3em] text-ink-soft">
-                  Tour {currentTour} / {tours} · {pos + 1}/{count} à parler
+                  {t('disc.tourProgress', { tour: currentTour, tours, pos: pos + 1, count })}
                 </div>
                 <motion.div
                   initial={{ scale: 0.7, opacity: 0 }}
@@ -105,12 +106,12 @@ export default function DiscussionScreen() {
                 >
                   🎤
                 </motion.div>
-                <div className="text-sm text-ink-soft">Au tour de</div>
+                <div className="text-sm text-ink-soft">{t('disc.turnOf')}</div>
                 <div className="mb-2 font-display text-4xl font-bold neon-text">
                   {current.name}
                 </div>
                 <p className="text-sm text-ink-soft">
-                  Donne un indice sur ton mot, sans le révéler.
+                  {t('disc.clue')}
                 </p>
 
                 {settings.timer && (
@@ -136,10 +137,10 @@ export default function DiscussionScreen() {
               <GlowCard className="p-8 text-center">
                 <div className="my-4 text-6xl">✅</div>
                 <h3 className="mb-2 font-display text-2xl font-bold">
-                  Tous les tours sont terminés
+                  {t('disc.doneTitle')}
                 </h3>
                 <p className="text-ink-soft">
-                  Place au débat final, puis au vote pour démasquer l'imposteur.
+                  {t('disc.doneDesc')}
                 </p>
               </GlowCard>
             </motion.div>
@@ -169,23 +170,23 @@ export default function DiscussionScreen() {
       <div className="flex flex-col items-center gap-3">
         {!finished ? (
           <NeonButton size="xl" onClick={next}>
-            {turn + 1 === totalTurns ? 'Dernier joueur ➜ Terminer' : 'Suivant ➜'}
+            {turn + 1 === totalTurns ? t('disc.lastPlayer') : t('disc.nextPlayer')}
           </NeonButton>
         ) : (
           <NeonButton size="xl" onClick={goVote}>
-            🗳️ Passer au vote
+            {t('disc.toVote')}
           </NeonButton>
         )}
 
         <div className="flex items-center gap-4 text-xs text-ink-soft/70">
           <span>
-            <kbd className="rounded bg-white/10 px-1.5 py-0.5">Entrée</kbd> /{' '}
-            <kbd className="rounded bg-white/10 px-1.5 py-0.5">Espace</kbd>{' '}
-            {finished ? 'voter' : 'suivant'}
+            <kbd className="rounded bg-white/10 px-1.5 py-0.5">{t('disc.kbdEnter')}</kbd> /{' '}
+            <kbd className="rounded bg-white/10 px-1.5 py-0.5">{t('disc.kbdSpace')}</kbd>{' '}
+            {finished ? t('disc.kbdVote') : t('disc.kbdNext')}
           </span>
           {!finished && (
             <button onClick={goVote} className="underline-offset-4 transition hover:text-ink hover:underline">
-              Passer directement au vote
+              {t('disc.skipToVote')}
             </button>
           )}
         </div>

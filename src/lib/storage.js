@@ -15,6 +15,7 @@ export const defaultSettings = {
   sound: true,
   timer: true,
   timerSeconds: 180,
+  lang: 'fr', // langue de l'interface : 'fr' | 'en'
 }
 
 export function loadSettings() {

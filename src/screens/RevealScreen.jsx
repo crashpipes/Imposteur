@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import QRCode from 'qrcode'
-import { useGame } from '../store/gameStore.jsx'
+import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import { CATEGORIES } from '../data/wordPairs.js'
@@ -10,6 +10,7 @@ import NeonButton from '../components/ui/NeonButton.jsx'
 
 export default function RevealScreen() {
   const { state, dispatch } = useGame()
+  const { t, tCat, lang } = useT()
   const play = usePlay()
   const { round, revealed } = state
   const qrMode = state.config.qrMode
@@ -98,29 +99,27 @@ export default function RevealScreen() {
           onClick={() => { play('click'); dispatch({ type: 'NEW_GAME' }) }}
           className="text-sm text-ink-soft transition hover:text-ink"
         >
-          ← Accueil
+          {t('reveal.back')}
         </button>
         <NeonButton size="sm" variant="secondary" onClick={regenerate}>
-          🔄 Autre carte
+          {t('reveal.otherCard')}
         </NeonButton>
       </div>
 
       <div className="mb-2 text-center text-sm uppercase tracking-[0.4em] text-ink-soft">
-        Distribution des rôles
+        {t('reveal.eyebrow')}
       </div>
       <h2 className="mb-1 text-center font-display text-3xl font-bold neon-text">
-        Chacun son tour 🤫
+        {t('reveal.title')}
       </h2>
       <p className="mx-auto mb-6 max-w-lg text-center text-ink-soft">
-        {qrMode
-          ? 'Mode QR : chaque joueur scanne son code à son tour pour voir son mot sur son téléphone.'
-          : "L'hôte tend l'écran à chaque joueur. Montrez la carte, puis masquez avant de passer au suivant."}
+        {qrMode ? t('reveal.introQr') : t('reveal.intro')}
       </p>
 
       {/* Aide clavier */}
       <div className="mx-auto mb-8 flex max-w-md items-center justify-center gap-2 text-xs text-ink-soft/80">
-        <kbd className="rounded bg-white/10 px-2 py-0.5">Espace</kbd>
-        <span>{qrMode ? 'afficher le QR suivant, puis le masquer' : 'montrer la carte suivante, puis la masquer'}</span>
+        <kbd className="rounded bg-white/10 px-2 py-0.5">{t('reveal.space')}</kbd>
+        <span>{qrMode ? t('reveal.spaceHintQr') : t('reveal.spaceHint')}</span>
       </div>
 
       {/* Progression */}
@@ -159,12 +158,12 @@ export default function RevealScreen() {
             >
               {isNext && (
                 <span className="absolute right-2 top-2 rounded-full bg-neon-primary/20 px-2 py-0.5 text-[10px] font-semibold text-neon-primary">
-                  Espace ⎵
+                  {t('reveal.space')} ⎵
                 </span>
               )}
               <span className="font-display text-lg font-semibold">{role.name}</span>
               <span className="mt-1 text-xs text-ink-soft">
-                {seen ? '✓ Carte vue' : qrMode ? 'Toucher pour le QR' : 'Toucher pour voir'}
+                {seen ? t('reveal.cardSeen') : qrMode ? t('reveal.tapQr') : t('reveal.tapSee')}
               </span>
             </motion.button>
           )
@@ -173,12 +172,12 @@ export default function RevealScreen() {
 
       <div className="mt-10 flex justify-center">
         <NeonButton size="xl" disabled={!allRevealed} onClick={goDiscussion}>
-          {allRevealed ? '💬 Lancer la discussion' : `Encore ${round.roles.length - revealed.length} joueur(s)`}
+          {allRevealed ? t('reveal.startDiscussion') : t('reveal.remaining', { n: round.roles.length - revealed.length })}
         </NeonButton>
       </div>
 
       <p className="mt-4 text-center text-xs text-ink-soft">
-        Catégorie : {category?.icon} {category?.label}
+        {t('reveal.category')} {category?.icon} {tCat(round.category)}
       </p>
 
       {/* Carte plein écran */}
@@ -190,6 +189,8 @@ export default function RevealScreen() {
             qrMode={qrMode}
             onReveal={doReveal}
             onClose={closeActive}
+            t={t}
+            lang={lang}
           />
         )}
       </AnimatePresence>
@@ -206,7 +207,7 @@ export default function RevealScreen() {
  *
  * Étapes : 'back' (carte face cachée) -> 'front' (mot/œuvre OU QR).
  * ------------------------------------------------------------------------ */
-function RoleModal({ role, stage, qrMode, onReveal, onClose }) {
+function RoleModal({ role, stage, qrMode, onReveal, onClose, t, lang }) {
   const isMrWhite = !role.word
   const [qr, setQr] = useState('')
   const [copied, setCopied] = useState(false)
@@ -218,7 +219,7 @@ function RoleModal({ role, stage, qrMode, onReveal, onClose }) {
       return
     }
     let alive = true
-    const url = cardUrl({ name: role.name, word: role.word, origin: role.origin, mrWhite: isMrWhite })
+    const url = cardUrl({ name: role.name, word: role.word, origin: role.origin, mrWhite: isMrWhite }, lang)
     QRCode.toDataURL(url, {
       width: 240,
       margin: 1,
@@ -235,7 +236,7 @@ function RoleModal({ role, stage, qrMode, onReveal, onClose }) {
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(
-        cardUrl({ name: role.name, word: role.word, origin: role.origin, mrWhite: isMrWhite }),
+        cardUrl({ name: role.name, word: role.word, origin: role.origin, mrWhite: isMrWhite }, lang),
       )
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
@@ -265,7 +266,7 @@ function RoleModal({ role, stage, qrMode, onReveal, onClose }) {
             whileHover={{ scale: 1.03 }}
             className="flex h-[26rem] w-80 transform-gpu flex-col items-center justify-center rounded-[2rem] border border-neon-primary/40 bg-gradient-to-br from-surface-soft to-surface shadow-glow [backface-visibility:hidden]"
           >
-            <div className="text-sm uppercase tracking-[0.4em] text-ink-soft">Carte de</div>
+            <div className="text-sm uppercase tracking-[0.4em] text-ink-soft">{t('reveal.cardOf')}</div>
             <div className="mt-2 mb-8 font-display text-4xl font-bold">{role.name}</div>
             <motion.div
               animate={{ rotateY: [0, 360] }}
@@ -274,7 +275,7 @@ function RoleModal({ role, stage, qrMode, onReveal, onClose }) {
             >
               {qrMode ? '📱' : '🎴'}
             </motion.div>
-            <div className="mt-8 text-ink-soft">Toucher / Espace pour révéler</div>
+            <div className="mt-8 text-ink-soft">{t('reveal.tapToReveal')}</div>
           </motion.button>
         )}
 
@@ -293,44 +294,43 @@ function RoleModal({ role, stage, qrMode, onReveal, onClose }) {
             {qrMode ? (
               /* ---- Mode QR : on montre un code à scanner (jamais le mot) ---- */
               <>
-                <p className="mb-3 mt-4 text-sm text-ink-soft">📱 Scanne pour voir ton mot</p>
+                <p className="mb-3 mt-4 text-sm text-ink-soft">{t('reveal.scanToSee')}</p>
                 {qr ? (
                   <img
                     src={qr}
-                    alt="QR code à scanner"
+                    alt="QR code"
                     className="h-52 w-52 rounded-2xl bg-white p-2"
                   />
                 ) : (
                   <div className="grid h-52 w-52 place-items-center rounded-2xl bg-white/10 text-sm text-ink-soft">
-                    Génération…
+                    {t('reveal.generating')}
                   </div>
                 )}
                 <button
                   onClick={copyLink}
                   className="mt-4 text-xs text-ink-soft underline-offset-4 transition hover:text-ink hover:underline"
                 >
-                  {copied ? '✓ Lien copié' : '🔗 Copier le lien'}
+                  {copied ? t('reveal.linkCopied') : t('reveal.copyLink')}
                 </button>
                 <p className="mt-2 max-w-[15rem] text-xs text-ink-soft/70">
-                  Chaque joueur scanne SON QR à son tour — ne montre pas celui des autres.
+                  {t('reveal.qrWarning')}
                 </p>
               </>
             ) : isMrWhite ? (
               /* ---- Carte Mr. White : aucun mot ---- */
               <>
                 <div className="my-5 text-6xl">🕵️</div>
-                <div className="mb-2 font-display text-4xl font-bold text-rose-400">Mr. White</div>
-                <p className="text-sm text-ink-soft">Tu n'as aucun mot.</p>
+                <div className="mb-2 font-display text-4xl font-bold text-rose-400">{t('reveal.mrWhite')}</div>
+                <p className="text-sm text-ink-soft">{t('reveal.noWord')}</p>
                 <p className="mt-3 max-w-[15rem] text-xs text-ink-soft/80">
-                  Écoute les autres, devine le mot commun et fonds-toi dans la masse.
-                  Surtout, ne te fais pas griller !
+                  {t('reveal.mrWhiteHint')}
                 </p>
               </>
             ) : (
               /* ---- Carte joueur : mot + univers ---- */
               <>
                 <div className="my-5 text-6xl">🃏</div>
-                <p className="mb-1 text-sm text-ink-soft">Ton mot est</p>
+                <p className="mb-1 text-sm text-ink-soft">{t('reveal.yourWord')}</p>
                 <motion.div
                   initial={{ scale: 0.6, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -347,20 +347,19 @@ function RoleModal({ role, stage, qrMode, onReveal, onClose }) {
                     transition={{ delay: 0.4 }}
                     className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-ink-soft"
                   >
-                    <span className="opacity-70">📚 Univers :</span>
+                    <span className="opacity-70">{t('reveal.universe')}</span>
                     <span className="font-medium text-ink">{role.origin}</span>
                   </motion.div>
                 )}
 
                 <p className="mt-5 max-w-[15rem] text-xs text-ink-soft/80">
-                  Mémorise ton mot. Reste discret : personne ne doit savoir si tu es
-                  l'imposteur.
+                  {t('reveal.playerHint')}
                 </p>
               </>
             )}
 
             <NeonButton size="lg" variant="secondary" className="mt-6 w-full" onClick={onClose}>
-              🙈 Masquer (Espace)
+              {t('reveal.hide')}
             </NeonButton>
           </motion.div>
         )}

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { useGame } from '../store/gameStore.jsx'
+import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import { CATEGORIES } from '../data/wordPairs.js'
@@ -10,6 +10,7 @@ import GlowCard from '../components/ui/GlowCard.jsx'
 
 export default function HomeScreen() {
   const { state, dispatch } = useGame()
+  const { t, tCat, locale } = useT()
   const play = usePlay()
   const [showHistory, setShowHistory] = useState(false)
 
@@ -59,8 +60,7 @@ export default function HomeScreen() {
         transition={{ delay: 0.35 }}
         className="mt-5 max-w-md text-ink-soft"
       >
-        Tout le monde reçoit le même mot… sauf un. Démasquez l'imposteur avant
-        qu'il ne devine le vôtre.
+        {t('home.tagline')}
       </motion.p>
 
       <motion.div
@@ -70,17 +70,17 @@ export default function HomeScreen() {
         className="mt-10 flex flex-col items-center gap-4"
       >
         <NeonButton size="xl" onClick={start} onMouseEnter={() => play('hover')}>
-          ▶ Créer une partie
+          {t('home.create')}
         </NeonButton>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <NeonButton size="sm" variant="secondary" onClick={openLibrary}>
-            📚 Voir toutes les cartes
+            {t('home.library')}
           </NeonButton>
           <button
             onClick={() => { play('click'); setShowHistory((s) => !s) }}
             className="text-sm text-ink-soft underline-offset-4 transition hover:text-ink hover:underline"
           >
-            {showHistory ? 'Masquer l\'historique' : `Historique (${state.history.length})`}
+            {showHistory ? t('home.hideHistory') : t('home.history', { n: state.history.length })}
           </button>
         </div>
       </motion.div>
@@ -97,7 +97,7 @@ export default function HomeScreen() {
             key={c.id}
             className="rounded-full border border-white/10 bg-surface-soft/50 px-4 py-2 text-sm text-ink-soft backdrop-blur"
           >
-            {c.icon} {c.label}
+            {c.icon} {tCat(c.id)}
           </span>
         ))}
       </motion.div>
@@ -111,18 +111,18 @@ export default function HomeScreen() {
         >
           <GlowCard className="p-6 text-left">
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold">Dernières parties</h3>
+              <h3 className="font-display text-lg font-semibold">{t('home.lastGames')}</h3>
               {state.history.length > 0 && (
                 <button
                   onClick={() => { play('click'); dispatch({ type: 'CLEAR_HISTORY' }) }}
                   className="text-xs text-rose-400 hover:underline"
                 >
-                  Tout effacer
+                  {t('home.clearAll')}
                 </button>
               )}
             </div>
             {state.history.length === 0 ? (
-              <p className="text-sm text-ink-soft">Aucune partie pour l'instant.</p>
+              <p className="text-sm text-ink-soft">{t('home.noGames')}</p>
             ) : (
               <ul className="space-y-2">
                 {state.history.map((h) => (
@@ -131,7 +131,7 @@ export default function HomeScreen() {
                     className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-2 text-sm"
                   >
                     <span className="text-ink-soft">
-                      {new Date(h.date).toLocaleString('fr-FR', {
+                      {new Date(h.date).toLocaleString(locale, {
                         day: '2-digit',
                         month: '2-digit',
                         hour: '2-digit',
@@ -146,7 +146,7 @@ export default function HomeScreen() {
                         h.outcome === 'players' ? 'text-emerald-400' : 'text-rose-400'
                       }
                     >
-                      {h.outcome === 'players' ? '👥 Joueurs' : '🕵️ Imposteur'}
+                      {h.outcome === 'players' ? t('home.players') : t('home.impostor')}
                     </span>
                   </li>
                 ))}
@@ -157,7 +157,7 @@ export default function HomeScreen() {
       )}
 
       <p className="mt-12 text-xs text-ink-soft/70">
-        Astuce : appuyez sur <kbd className="rounded bg-white/10 px-1.5 py-0.5">Entrée</kbd> pour commencer.
+        {t('home.tip')} <kbd className="rounded bg-white/10 px-1.5 py-0.5">{t('home.tipEnter')}</kbd> {t('home.tipEnd')}
       </p>
     </div>
   )

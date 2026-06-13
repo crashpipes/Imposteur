@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useGame } from '../store/gameStore.jsx'
+import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import NeonButton from '../components/ui/NeonButton.jsx'
@@ -8,6 +8,7 @@ import GlowCard from '../components/ui/GlowCard.jsx'
 
 export default function ResultScreen() {
   const { state, dispatch } = useGame()
+  const { t } = useT()
   const play = usePlay()
   const { result, scores } = state
 
@@ -39,8 +40,10 @@ export default function ResultScreen() {
 
   const impostorCount = result.roles.filter((r) => r.isImpostor).length
   const pointsText = playersWin
-    ? '+1 point pour chaque joueur innocent'
-    : `+2 points pour ${impostorCount > 1 ? 'les imposteurs' : "l'imposteur"}`
+    ? t('result.pointsPlayers')
+    : impostorCount > 1
+      ? t('result.pointsImpostors')
+      : t('result.pointsImpostor')
 
   const ranking = Object.entries(scores || {})
     .map(([name, points]) => ({ name, points }))
@@ -61,13 +64,13 @@ export default function ResultScreen() {
             playersWin ? 'text-emerald-400' : 'text-rose-400'
           }`}
         >
-          {playersWin ? 'Les joueurs gagnent !' : "L'imposteur gagne !"}
+          {playersWin ? t('result.playersWin') : t('result.impostorWin')}
         </h2>
         <p className="mt-3 text-ink-soft">
           {result.correctGuess === true &&
-            `L'imposteur a deviné le mot principal : « ${result.guessedWord} ».`}
+            t('result.correctGuess', { word: result.guessedWord })}
           {result.correctGuess === false &&
-            `Mauvaise réponse de l'imposteur (« ${result.guessedWord} »). Démasqué !`}
+            t('result.wrongGuess', { word: result.guessedWord })}
           {result.reason && result.reason}
         </p>
         <div className="mt-3 inline-block rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm font-medium text-ink">
@@ -79,7 +82,7 @@ export default function ResultScreen() {
       <GlowCard className="mb-6 p-6">
         <div className="grid grid-cols-2 gap-4 text-center">
           <div className="rounded-2xl bg-emerald-500/10 p-4">
-            <div className="text-xs uppercase tracking-widest text-ink-soft">Mot principal</div>
+            <div className="text-xs uppercase tracking-widest text-ink-soft">{t('result.mainWord')}</div>
             <div className="mt-1 font-display text-2xl font-bold text-emerald-400">
               {result.mainWord}
             </div>
@@ -88,14 +91,14 @@ export default function ResultScreen() {
             )}
           </div>
           <div className="rounded-2xl bg-rose-500/10 p-4">
-            <div className="text-xs uppercase tracking-widest text-ink-soft">Mot imposteur</div>
+            <div className="text-xs uppercase tracking-widest text-ink-soft">{t('result.impostorWord')}</div>
             <div className="mt-1 font-display text-2xl font-bold text-rose-400">
-              {result.impostorWord || 'Mr. White 🕵️'}
+              {result.impostorWord || t('result.mrWhiteWord')}
             </div>
             {result.impostorFrom ? (
               <div className="mt-1 text-xs text-ink-soft">📚 {result.impostorFrom}</div>
             ) : !result.impostorWord ? (
-              <div className="mt-1 text-xs text-ink-soft">aucun mot</div>
+              <div className="mt-1 text-xs text-ink-soft">{t('result.noWord')}</div>
             ) : null}
           </div>
         </div>
@@ -103,7 +106,7 @@ export default function ResultScreen() {
 
       {/* Récap des rôles */}
       <GlowCard className="mb-6 p-6">
-        <h3 className="mb-4 font-display text-lg font-semibold">Les rôles</h3>
+        <h3 className="mb-4 font-display text-lg font-semibold">{t('result.rolesTitle')}</h3>
         <ul className="space-y-2">
           {result.roles.map((role, i) => (
             <motion.li
@@ -120,7 +123,7 @@ export default function ResultScreen() {
               <span
                 className={`text-right text-sm ${role.isImpostor ? 'text-rose-400' : 'text-emerald-400'}`}
               >
-                {role.isImpostor ? 'Imposteur' : 'Joueur'} · {role.word || 'Mr. White'}
+                {role.isImpostor ? t('result.roleImpostor') : t('result.rolePlayer')} · {role.word || 'Mr. White'}
                 {role.origin && (
                   <span className="block text-xs text-ink-soft">{role.origin}</span>
                 )}
@@ -133,7 +136,7 @@ export default function ResultScreen() {
       {/* Score de la session (cumulé) */}
       {ranking.length > 0 && (
         <GlowCard className="mb-8 p-6">
-          <h3 className="mb-3 font-display text-lg font-semibold">Score de la session</h3>
+          <h3 className="mb-3 font-display text-lg font-semibold">{t('result.sessionScore')}</h3>
           <ul className="space-y-1.5">
             {ranking.map((r) => {
               const leader = r.points === topScore && topScore > 0
@@ -146,7 +149,7 @@ export default function ResultScreen() {
                     {leader ? '👑 ' : ''}
                     {r.name}
                   </span>
-                  <span className="font-display font-bold tabular-nums">{r.points} pts</span>
+                  <span className="font-display font-bold tabular-nums">{r.points} {t('result.pts')}</span>
                 </li>
               )
             })}
@@ -156,18 +159,18 @@ export default function ResultScreen() {
 
       <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
         <NeonButton size="lg" onClick={replay}>
-          🔄 Rejouer
+          {t('result.replay')}
         </NeonButton>
         <NeonButton size="lg" variant="secondary" onClick={newGame}>
-          ⚙️ Nouvelle partie
+          {t('result.newGame')}
         </NeonButton>
         <NeonButton size="lg" variant="secondary" onClick={showScore}>
-          🏁 Score final
+          {t('result.finalScore')}
         </NeonButton>
       </div>
       <p className="mt-4 text-center text-xs text-ink-soft/70">
-        <kbd className="rounded bg-white/10 px-1.5 py-0.5">Entrée</kbd> rejouer ·{' '}
-        <kbd className="rounded bg-white/10 px-1.5 py-0.5">Échap</kbd> nouvelle partie
+        <kbd className="rounded bg-white/10 px-1.5 py-0.5">{t('result.kbdEnter')}</kbd> {t('result.kbdReplay')} ·{' '}
+        <kbd className="rounded bg-white/10 px-1.5 py-0.5">{t('result.kbdEscape')}</kbd> {t('result.kbdNewGame')}
       </p>
     </div>
   )

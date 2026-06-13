@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useGame } from '../store/gameStore.jsx'
+import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { checkImpostorGuess } from '../lib/wordGenerator.js'
 import NeonButton from '../components/ui/NeonButton.jsx'
@@ -8,6 +8,7 @@ import GlowCard from '../components/ui/GlowCard.jsx'
 
 export default function VoteScreen() {
   const { state, dispatch } = useGame()
+  const { t } = useT()
   const play = usePlay()
   const { round, eliminated } = state
 
@@ -42,7 +43,7 @@ export default function VoteScreen() {
 
   // Mauvaise accusation = partie perdue, on NE revote PAS : l'imposteur l'emporte.
   const impostorsWinByMistake = () => {
-    finish('impostor', { reason: "Mauvaise accusation : l'imposteur n'a pas été trouvé." })
+    finish('impostor', { reason: t('vote.reasonWrong') })
   }
 
   // L'imposteur accusé tente de deviner le mot principal.
@@ -102,17 +103,17 @@ export default function VoteScreen() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <div className="mb-2 text-center text-sm uppercase tracking-[0.4em] text-ink-soft">
-        Le vote
+        {t('vote.eyebrow')}
       </div>
       <h2 className="mb-8 text-center font-display text-4xl font-bold neon-text">
-        Qui est l'imposteur ? 🗳️
+        {t('vote.title')}
       </h2>
 
       {/* SÉLECTION */}
       {stage === 'select' && (
         <>
           <p className="mb-6 text-center text-ink-soft">
-            L'hôte sélectionne le joueur éliminé par le groupe.
+            {t('vote.instruction')}
           </p>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             {round.roles.map((role, i) => {
@@ -142,7 +143,7 @@ export default function VoteScreen() {
       {/* RÉVÉLATION DU RÔLE ACCUSÉ */}
       <AnimatePresence>
         {stage === 'reveal' && accusedRole && (
-          <RevealAccused role={accusedRole} onDone={onRevealEnd} />
+          <RevealAccused role={accusedRole} onDone={onRevealEnd} t={t} />
         )}
       </AnimatePresence>
 
@@ -152,18 +153,21 @@ export default function VoteScreen() {
           <GlowCard className="p-8 text-center">
             <div className="mb-4 text-6xl">😬</div>
             <h3 className="mb-2 font-display text-2xl font-bold text-rose-400">
-              {accusedRole.name} n'était pas l'imposteur !
+              {t('vote.notImpostor', { name: accusedRole.name })}
             </h3>
             <p className="mb-2 text-ink-soft">
-              Le mot de {accusedRole.name} était «&nbsp;{accusedRole.word}&nbsp;»
-              {accusedRole.origin ? ` (${accusedRole.origin})` : ''}.
+              {t('vote.wordWas', {
+                name: accusedRole.name,
+                word: accusedRole.word,
+                origin: accusedRole.origin ? ` (${accusedRole.origin})` : '',
+              })}
             </p>
             <p className="mb-6 font-medium text-rose-300">
-              Mauvaise accusation : l'imposteur l'emporte.
+              {t('vote.wrongAccusation')}
             </p>
             <div className="flex justify-center">
               <NeonButton variant="danger" onClick={impostorsWinByMistake}>
-                Voir le résultat
+                {t('vote.seeResult')}
               </NeonButton>
             </div>
           </GlowCard>
@@ -176,22 +180,21 @@ export default function VoteScreen() {
           <GlowCard className="p-8 text-center">
             <div className="mb-4 text-6xl">🕵️</div>
             <h3 className="mb-1 font-display text-2xl font-bold text-rose-400">
-              {accusedRole.name} était l'imposteur !
+              {t('vote.wasImpostor', { name: accusedRole.name })}
             </h3>
             <p className="mb-6 text-ink-soft">
-              Dernière chance : devine le <strong>mot principal</strong> des autres
-              joueurs pour renverser la partie.
+              {t('vote.lastChance')}
             </p>
             <input
               autoFocus
               value={guess}
               onChange={(e) => setGuess(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && guess.trim() && submitGuess()}
-              placeholder="Tape ta réponse…"
+              placeholder={t('vote.guessPlaceholder')}
               className="mb-5 w-full rounded-2xl border border-white/15 bg-surface/60 px-5 py-4 text-center font-display text-xl text-ink outline-none focus:border-neon-primary focus:shadow-glow-soft"
             />
             <NeonButton size="lg" disabled={!guess.trim()} onClick={submitGuess}>
-              Valider ma réponse
+              {t('vote.submitGuess')}
             </NeonButton>
           </GlowCard>
         </motion.div>
@@ -201,7 +204,7 @@ export default function VoteScreen() {
 }
 
 /* Animation de suspense lors de la révélation du rôle accusé. */
-function RevealAccused({ role, onDone }) {
+function RevealAccused({ role, onDone, t }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -217,8 +220,8 @@ function RevealAccused({ role, onDone }) {
       >
         🥁
       </motion.div>
-      <p className="font-display text-2xl text-ink-soft">Roulement de tambour…</p>
-      <p className="mt-2 text-ink-soft">On révèle le rôle de {role.name}</p>
+      <p className="font-display text-2xl text-ink-soft">{t('vote.drumroll')}</p>
+      <p className="mt-2 text-ink-soft">{t('vote.revealingRole', { name: role.name })}</p>
     </motion.div>
   )
 }
