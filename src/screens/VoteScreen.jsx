@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { checkImpostorGuess } from '../lib/wordGenerator.js'
+import { localizeWord, localizeFrom } from '../data/wordPairsEn.js'
 import NeonButton from '../components/ui/NeonButton.jsx'
 import GlowCard from '../components/ui/GlowCard.jsx'
 
 export default function VoteScreen() {
   const { state, dispatch } = useGame()
-  const { t } = useT()
+  const { t, lang } = useT()
   const play = usePlay()
   const { round, eliminated } = state
 
@@ -48,7 +49,10 @@ export default function VoteScreen() {
 
   // L'imposteur accusé tente de deviner le mot principal.
   const submitGuess = () => {
-    const correct = checkImpostorGuess(guess, round.mainWord)
+    // On accepte la bonne réponse en français OU en anglais (mot localisé).
+    const correct =
+      checkImpostorGuess(guess, round.mainWord) ||
+      checkImpostorGuess(guess, localizeWord(round.mainWord, 'en'))
     if (correct) {
       play('win')
       finish('impostor', { guessedWord: guess, correctGuess: true })
@@ -158,8 +162,8 @@ export default function VoteScreen() {
             <p className="mb-2 text-ink-soft">
               {t('vote.wordWas', {
                 name: accusedRole.name,
-                word: accusedRole.word,
-                origin: accusedRole.origin ? ` (${accusedRole.origin})` : '',
+                word: localizeWord(accusedRole.word, lang),
+                origin: accusedRole.origin ? ` (${localizeFrom(accusedRole.origin, lang)})` : '',
               })}
             </p>
             <p className="mb-6 font-medium text-rose-300">

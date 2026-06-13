@@ -1,5 +1,6 @@
 import { decodeCard } from './lib/cardLink.js'
 import { translate } from './lib/i18n.js'
+import { localizeWord, localizeFrom } from './data/wordPairsEn.js'
 
 export default function CardView({ param, lang = 'fr' }) {
   const t = (key, vars) => translate(lang, key, vars)
@@ -32,11 +33,11 @@ export default function CardView({ param, lang = 'fr' }) {
           <>
             <div className="my-6 text-7xl">🃏</div>
             <p className="mb-1 text-sm text-ink-soft">{t('card.yourWord')}</p>
-            <div className="font-display text-4xl font-bold neon-text">{data.word}</div>
+            <div className="font-display text-4xl font-bold neon-text">{localizeWord(data.word, lang)}</div>
             {data.origin && (
               <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-ink-soft">
                 <span className="opacity-70">{t('card.universe')}</span>
-                <span className="font-medium text-ink">{data.origin}</span>
+                <span className="font-medium text-ink">{localizeFrom(data.origin, lang)}</span>
               </div>
             )}
           </>

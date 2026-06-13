@@ -4,6 +4,7 @@ import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import { CATEGORIES, WORD_DATA, totalPairs } from '../data/wordPairs.js'
+import { localizeWord, localizeFrom, localizeLink } from '../data/wordPairsEn.js'
 import { loadCustomPairs, addCustomPair, removeCustomPair } from '../lib/storage.js'
 import GlowCard from '../components/ui/GlowCard.jsx'
 import NeonButton from '../components/ui/NeonButton.jsx'
@@ -25,8 +26,8 @@ function buildAllPairs() {
   return [...custom, ...base] // cartes perso en premier
 }
 
-function linkLabel(p, t) {
-  if (p.link) return p.link
+function linkLabel(p, t, lang) {
+  if (p.link) return localizeLink(p.link, lang)
   if (p.aFrom && p.bFrom && p.aFrom === p.bFrom) return t('lib.sameUniverse')
   return t('lib.closeWords')
 }
@@ -39,7 +40,7 @@ const emptyForm = { category: 'anime', a: '', aFrom: '', b: '', bFrom: '', link:
 
 export default function LibraryScreen() {
   const { dispatch } = useGame()
-  const { t, tCat } = useT()
+  const { t, tCat, lang } = useT()
   const play = usePlay()
 
   const [query, setQuery] = useState('')
@@ -75,11 +76,17 @@ export default function LibraryScreen() {
       if (cat !== 'all' && p.category !== cat) return false
       if (!q) return true
       const hay = norm(
-        [p.a, p.b, p.aFrom, p.bFrom, p.link, tCat(p.category)].join(' '),
+        [
+          p.a, p.b, p.aFrom, p.bFrom, p.link, tCat(p.category),
+          // termes localisés pour permettre la recherche en anglais aussi
+          localizeWord(p.a, lang), localizeWord(p.b, lang),
+          localizeFrom(p.aFrom, lang), localizeFrom(p.bFrom, lang),
+          localizeLink(p.link, lang),
+        ].join(' '),
       )
       return hay.includes(q)
     })
-  }, [allPairs, query, cat, tCat])
+  }, [allPairs, query, cat, tCat, lang])
 
   const counts = useMemo(() => {
     const c = { all: allPairs.length }
@@ -320,13 +327,13 @@ export default function LibraryScreen() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <WordSide word={p.a} from={p.aFrom} />
+                  <WordSide word={localizeWord(p.a, lang)} from={localizeFrom(p.aFrom, lang)} />
                   <span className="shrink-0 text-lg text-neon-primary">↔</span>
-                  <WordSide word={p.b} from={p.bFrom} align="right" />
+                  <WordSide word={localizeWord(p.b, lang)} from={localizeFrom(p.bFrom, lang)} align="right" />
                 </div>
 
                 <div className="mt-3 border-t border-white/10 pt-2 text-center text-xs text-ink-soft">
-                  🔗 {linkLabel(p, t)}
+                  🔗 {linkLabel(p, t, lang)}
                 </div>
               </GlowCard>
             </motion.div>

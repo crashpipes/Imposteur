@@ -4,13 +4,14 @@ import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import { CATEGORIES } from '../data/wordPairs.js'
+import { localizeWord } from '../data/wordPairsEn.js'
 import detectiveUrl from '../assets/detective.svg'
 import NeonButton from '../components/ui/NeonButton.jsx'
 import GlowCard from '../components/ui/GlowCard.jsx'
 
 export default function HomeScreen() {
   const { state, dispatch } = useGame()
-  const { t, tCat, locale } = useT()
+  const { t, tCat, locale, lang } = useT()
   const play = usePlay()
   const [showHistory, setShowHistory] = useState(false)
 
@@ -139,7 +140,7 @@ export default function HomeScreen() {
                       })}
                     </span>
                     <span className="font-medium">
-                      {h.mainWord} <span className="text-ink-soft">vs</span> {h.impostorWord || 'Mr. White'}
+                      {localizeWord(h.mainWord, lang)} <span className="text-ink-soft">vs</span> {h.impostorWord ? localizeWord(h.impostorWord, lang) : 'Mr. White'}
                     </span>
                     <span
                       className={

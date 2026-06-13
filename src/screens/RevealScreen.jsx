@@ -6,6 +6,7 @@ import { usePlay } from '../hooks/soundContext.jsx'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import { CATEGORIES } from '../data/wordPairs.js'
 import { cardUrl } from '../lib/cardLink.js'
+import { localizeWord, localizeFrom } from '../data/wordPairsEn.js'
 import NeonButton from '../components/ui/NeonButton.jsx'
 
 export default function RevealScreen() {
@@ -337,7 +338,7 @@ function RoleModal({ role, stage, qrMode, onReveal, onClose, t, lang }) {
                   transition={{ delay: 0.2, type: 'spring', stiffness: 260 }}
                   className="font-display text-4xl font-bold neon-text"
                 >
-                  {role.word}
+                  {localizeWord(role.word, lang)}
                 </motion.div>
 
                 {role.origin && (
@@ -348,7 +349,7 @@ function RoleModal({ role, stage, qrMode, onReveal, onClose, t, lang }) {
                     className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-ink-soft"
                   >
                     <span className="opacity-70">{t('reveal.universe')}</span>
-                    <span className="font-medium text-ink">{role.origin}</span>
+                    <span className="font-medium text-ink">{localizeFrom(role.origin, lang)}</span>
                   </motion.div>
                 )}
 

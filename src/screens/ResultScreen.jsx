@@ -2,13 +2,14 @@ import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useGame, useT } from '../store/gameStore.jsx'
 import { usePlay } from '../hooks/soundContext.jsx'
+import { localizeWord, localizeFrom } from '../data/wordPairsEn.js'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 import NeonButton from '../components/ui/NeonButton.jsx'
 import GlowCard from '../components/ui/GlowCard.jsx'
 
 export default function ResultScreen() {
   const { state, dispatch } = useGame()
-  const { t } = useT()
+  const { t, lang } = useT()
   const play = usePlay()
   const { result, scores } = state
 
@@ -84,19 +85,19 @@ export default function ResultScreen() {
           <div className="rounded-2xl bg-emerald-500/10 p-4">
             <div className="text-xs uppercase tracking-widest text-ink-soft">{t('result.mainWord')}</div>
             <div className="mt-1 font-display text-2xl font-bold text-emerald-400">
-              {result.mainWord}
+              {localizeWord(result.mainWord, lang)}
             </div>
             {result.mainFrom && (
-              <div className="mt-1 text-xs text-ink-soft">📚 {result.mainFrom}</div>
+              <div className="mt-1 text-xs text-ink-soft">📚 {localizeFrom(result.mainFrom, lang)}</div>
             )}
           </div>
           <div className="rounded-2xl bg-rose-500/10 p-4">
             <div className="text-xs uppercase tracking-widest text-ink-soft">{t('result.impostorWord')}</div>
             <div className="mt-1 font-display text-2xl font-bold text-rose-400">
-              {result.impostorWord || t('result.mrWhiteWord')}
+              {result.impostorWord ? localizeWord(result.impostorWord, lang) : t('result.mrWhiteWord')}
             </div>
             {result.impostorFrom ? (
-              <div className="mt-1 text-xs text-ink-soft">📚 {result.impostorFrom}</div>
+              <div className="mt-1 text-xs text-ink-soft">📚 {localizeFrom(result.impostorFrom, lang)}</div>
             ) : !result.impostorWord ? (
               <div className="mt-1 text-xs text-ink-soft">{t('result.noWord')}</div>
             ) : null}
@@ -123,9 +124,9 @@ export default function ResultScreen() {
               <span
                 className={`text-right text-sm ${role.isImpostor ? 'text-rose-400' : 'text-emerald-400'}`}
               >
-                {role.isImpostor ? t('result.roleImpostor') : t('result.rolePlayer')} · {role.word || 'Mr. White'}
+                {role.isImpostor ? t('result.roleImpostor') : t('result.rolePlayer')} · {role.word ? localizeWord(role.word, lang) : 'Mr. White'}
                 {role.origin && (
-                  <span className="block text-xs text-ink-soft">{role.origin}</span>
+                  <span className="block text-xs text-ink-soft">{localizeFrom(role.origin, lang)}</span>
                 )}
               </span>
             </motion.li>
