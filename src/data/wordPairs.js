@@ -51,6 +51,9 @@ export const CATEGORIES = {
 export const WORD_DATA = {
   anime: [
     // --- Ajouts : familles, mentors, rôles et ressemblances ---
+    { a: 'Natsu', aFrom: 'Fairy Tail', b: 'Luffy', bFrom: 'One Piece', link: 'Héros gloutons au grand cœur' },
+    { a: 'Erza', aFrom: 'Fairy Tail', b: 'Mikasa', bFrom: "L'Attaque des Titans", link: 'Guerrières fortes et protectrices' },
+    { a: 'Killua', aFrom: 'Hunter x Hunter', b: 'Hitsugaya', bFrom: 'Bleach', link: 'Prodiges aux cheveux argentés' },
     { a: 'Naruto', aFrom: 'Naruto', b: 'Boruto', bFrom: 'Boruto', link: 'Père et fils ninjas' },
     { a: 'Goku', aFrom: 'Dragon Ball', b: 'Goten', bFrom: 'Dragon Ball', link: 'Père et fils Saiyans' },
     { a: 'Ichigo', aFrom: 'Bleach', b: 'Tanjiro', bFrom: 'Demon Slayer', link: 'Sabreurs qui protègent leur sœur' },
