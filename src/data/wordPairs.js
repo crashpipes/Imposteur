@@ -50,6 +50,20 @@ export const CATEGORIES = {
 
 export const WORD_DATA = {
   anime: [
+    // --- Ajouts : familles, mentors, rôles et ressemblances ---
+    { a: 'Naruto', aFrom: 'Naruto', b: 'Boruto', bFrom: 'Boruto', link: 'Père et fils ninjas' },
+    { a: 'Goku', aFrom: 'Dragon Ball', b: 'Goten', bFrom: 'Dragon Ball', link: 'Père et fils Saiyans' },
+    { a: 'Ichigo', aFrom: 'Bleach', b: 'Tanjiro', bFrom: 'Demon Slayer', link: 'Sabreurs qui protègent leur sœur' },
+    { a: 'Nezuko', aFrom: 'Demon Slayer', b: 'Anya', bFrom: 'Spy x Family', link: 'Petites mascottes adorables' },
+    { a: 'Levi', aFrom: "L'Attaque des Titans", b: 'Gojo', bFrom: 'Jujutsu Kaisen', link: 'Considérés comme les plus forts de leur monde' },
+    { a: 'Zoro', aFrom: 'One Piece', b: 'Kenshin', bFrom: 'Kenshin le Vagabond', link: 'Sabreurs errants' },
+    { a: 'Bulma', aFrom: 'Dragon Ball', b: 'Winry', bFrom: 'Fullmetal Alchemist', link: 'Mécaniciennes de génie' },
+    { a: 'Shanks', aFrom: 'One Piece', b: 'Jiraiya', bFrom: 'Naruto', link: 'Mentors charismatiques du héros' },
+    { a: 'Hisoka', aFrom: 'Hunter x Hunter', b: 'Orochimaru', bFrom: 'Naruto', link: 'Adversaires louches obsédés par la force' },
+    { a: 'Saitama', aFrom: 'One Punch Man', b: 'Goku', bFrom: 'Dragon Ball', link: 'Cherchent un adversaire à leur niveau' },
+    { a: 'Light', aFrom: 'Death Note', b: 'Johan', bFrom: 'Monster', link: 'Antagonistes manipulateurs et brillants' },
+    { a: 'Mob', aFrom: 'Mob Psycho 100', b: 'Saiki', bFrom: 'Saiki K.', link: 'Espers qui veulent une vie normale' },
+
     // --- Ajouts : ressemblances variées (cross-univers) ---
     { a: 'Saitama', aFrom: 'One Punch Man', b: 'All Might', bFrom: 'My Hero Academia', link: 'Héros au grand sourire qui écrasent tout' },
     { a: 'Vegeta', aFrom: 'Dragon Ball', b: 'Bakugo', bFrom: 'My Hero Academia', link: 'Rivaux explosifs et orgueilleux' },
@@ -119,7 +133,31 @@ export const WORD_DATA = {
   ],
 
   films: [
-    { a: 'Iron Man', aFrom: 'Marvel (MCU)', b: 'Batman', bFrom: 'DC Comics', link: 'Héros milliardaires en armure' },
+    // --- Ajouts : intrigues, rôles et ressemblances variées ---
+    { a: 'Forrest Gump', aFrom: 'Forrest Gump', b: 'Truman', bFrom: 'The Truman Show', link: 'Hommes naïfs au destin hors normes' },
+    { a: 'Le Seigneur des Anneaux', aFrom: 'Tolkien', b: 'Harry Potter', bFrom: 'J.K. Rowling', link: 'Sagas fantastiques cultes' },
+    { a: 'Harry Potter', aFrom: 'Wizarding World', b: 'Percy Jackson', bFrom: 'Rick Riordan', link: 'Ados élus dans un monde magique' },
+    { a: 'Shrek', aFrom: 'DreamWorks', b: 'Hulk', bFrom: 'Marvel', link: 'Grands costauds verts grognons' },
+    { a: 'Dark Vador', aFrom: 'Star Wars', b: 'Sauron', bFrom: 'Le Seigneur des Anneaux', link: 'Seigneurs des ténèbres iconiques' },
+    { a: 'Yoda', aFrom: 'Star Wars', b: 'Maître Oogway', bFrom: 'Kung Fu Panda', link: 'Petits maîtres très sages' },
+    { a: 'Jack Sparrow', aFrom: 'Pirates des Caraïbes', b: 'Capitaine Crochet', bFrom: 'Peter Pan', link: 'Pirates excentriques' },
+    { a: 'Le Roi Lion', aFrom: 'Disney', b: 'Hamlet', bFrom: 'Shakespeare', link: 'Un oncle tue le roi, le fils se venge' },
+    { a: 'Avatar', aFrom: 'James Cameron', b: 'Pocahontas', bFrom: 'Disney', link: "Un étranger tombe amoureux d'une autochtone" },
+    { a: 'Matrix', aFrom: 'Matrix', b: 'Inception', bFrom: 'Christopher Nolan', link: 'Une réalité dont on doute' },
+    { a: 'It', aFrom: 'Stephen King', b: 'Conjuring', bFrom: 'The Conjuring', link: "Films d'horreur cultes" },
+    { a: 'Frozen', aFrom: 'Disney', b: 'Raiponce', bFrom: 'Disney', link: 'Princesses Disney modernes' },
+    { a: 'Gandalf', aFrom: 'Le Seigneur des Anneaux', b: 'Obi-Wan Kenobi', bFrom: 'Star Wars', link: 'Mentors qui se sacrifient' },
+    { a: 'Thanos', aFrom: 'Marvel', b: 'Voldemort', bFrom: 'Harry Potter', link: 'Méchants ultimes des sagas' },
+    { a: 'Joker', aFrom: 'DC', b: 'Le Masque', bFrom: 'The Mask', link: 'Visages blancs au sourire dément' },
+    { a: 'King Kong', aFrom: 'King Kong', b: 'Godzilla', bFrom: 'Godzilla', link: 'Monstres géants rivaux' },
+    { a: 'Jurassic Park', aFrom: 'Spielberg', b: 'Jumanji', bFrom: 'Jumanji', link: 'Aventures avec animaux dangereux' },
+    { a: 'La La Land', aFrom: 'La La Land', b: 'Whiplash', bFrom: 'Whiplash', link: 'Films de Damien Chazelle sur la musique' },
+    { a: 'Toy Story', aFrom: 'Pixar', b: 'Les Indestructibles', bFrom: 'Pixar', link: 'Films Pixar cultes' },
+    { a: 'Le Roi Lion', aFrom: 'Disney', b: 'Le Livre de la Jungle', bFrom: 'Disney', link: 'Animaux de la jungle chez Disney' },
+    { a: 'Spider-Man', aFrom: 'Marvel', b: 'Batman', bFrom: 'DC', link: 'Héros masqués justiciers urbains' },
+    { a: 'Saw', aFrom: 'Saw', b: 'Hostel', bFrom: 'Hostel', link: "Films d'horreur gore" },
+    { a: 'Gladiator', aFrom: 'Ridley Scott', b: 'Braveheart', bFrom: 'Braveheart', link: "Guerriers qui se rebellent contre un empire" },
+    { a: 'Le Parrain', aFrom: 'Coppola', b: 'Scarface', bFrom: 'De Palma', link: 'Ascensions de mafieux au cinéma' },
     { a: 'Dark Vador', aFrom: 'Star Wars', b: 'Kylo Ren', bFrom: 'Star Wars', hardcore: true },
     { a: 'Le Parrain', aFrom: 'Film de F. F. Coppola', b: 'Les Affranchis', bFrom: 'Film de M. Scorsese', link: 'Films de mafia' },
     { a: 'Jurassic Park', aFrom: 'Film de S. Spielberg', b: 'King Kong', bFrom: 'Film de monstre', link: 'Créatures géantes' },
@@ -143,7 +181,29 @@ export const WORD_DATA = {
   ],
 
   series: [
-    { a: 'Breaking Bad', aFrom: 'Série AMC', b: 'Better Call Saul', bFrom: 'Spin-off de Breaking Bad', hardcore: true },
+    // --- Ajouts : genres, intrigues et ressemblances variées ---
+    { a: 'Stranger Things', aFrom: 'Netflix', b: 'It', bFrom: 'Stephen King', link: 'Bande de gosses contre une horreur des années 80' },
+    { a: 'The Walking Dead', aFrom: 'AMC', b: 'The Last of Us', bFrom: 'HBO', link: 'Survie en apocalypse zombie' },
+    { a: 'Game of Thrones', aFrom: 'HBO', b: 'The Witcher', bFrom: 'Netflix', link: 'Fantasy sombre et politique' },
+    { a: 'Friends', aFrom: 'NBC', b: 'Seinfeld', bFrom: 'NBC', link: 'Sitcoms new-yorkaises des années 90' },
+    { a: 'The Big Bang Theory', aFrom: 'CBS', b: 'Friends', bFrom: 'NBC', link: "Sitcoms à bande d'amis" },
+    { a: 'Black Mirror', aFrom: 'Netflix', b: 'The Twilight Zone', bFrom: 'CBS', link: 'Anthologies inquiétantes' },
+    { a: 'Prison Break', aFrom: 'Fox', b: 'La Casa de Papel', bFrom: 'Netflix', link: 'Plans minutieux contre le système' },
+    { a: 'Dexter', aFrom: 'Showtime', b: 'You', bFrom: 'Netflix', link: 'Tueurs avec voix off et bonne excuse' },
+    { a: 'Vikings', aFrom: 'History', b: 'Spartacus', bFrom: 'Starz', link: 'Séries historiques violentes' },
+    { a: 'Breaking Bad', aFrom: 'AMC', b: 'Ozark', bFrom: 'Netflix', link: 'Une famille rangée plonge dans le crime' },
+    { a: 'Wednesday', aFrom: 'Netflix', b: 'La Famille Addams', bFrom: 'The Addams Family', link: 'Univers gothique et morbide' },
+    { a: 'How I Met Your Mother', aFrom: 'CBS', b: 'New Girl', bFrom: 'Fox', link: 'Colocs trentenaires en sitcom' },
+    { a: 'Narcos', aFrom: 'Netflix', b: 'Peaky Blinders', bFrom: 'BBC', link: 'Empires criminels qui montent' },
+    { a: 'Chernobyl', aFrom: 'HBO', b: 'Band of Brothers', bFrom: 'HBO', link: 'Mini-séries HBO acclamées' },
+    { a: 'Squid Game', aFrom: 'Netflix', b: 'Hunger Games', bFrom: 'film', link: 'Des pauvres forcés à des jeux mortels' },
+    { a: 'Arcane', aFrom: 'Netflix', b: 'Castlevania', bFrom: 'Netflix', link: 'Animations adultes tirées de jeux vidéo' },
+    { a: "Grey's Anatomy", aFrom: 'ABC', b: 'Dr House', bFrom: 'Fox', link: 'Séries médicales' },
+    { a: 'Better Call Saul', aFrom: 'AMC', b: 'The Sopranos', bFrom: 'HBO', link: 'Drames sur des hommes moralement gris' },
+    { a: 'The Boys', aFrom: 'Prime Video', b: 'Invincible', bFrom: 'Prime Video', link: 'Super-héros adultes et sanglants' },
+    { a: 'Loki', aFrom: 'Marvel', b: 'Doctor Who', bFrom: 'BBC', link: 'Voyages dans le temps fantasques' },
+    { a: 'Sherlock', aFrom: 'BBC', b: 'Lupin', bFrom: 'Netflix', link: 'Génies à chapeau, déduction et cambriolage' },
+    { a: 'Vikings', aFrom: 'History', b: 'The Last Kingdom', bFrom: 'Netflix', link: 'Vikings contre Saxons' },
     { a: 'Walter White', aFrom: 'Breaking Bad', b: 'Saul Goodman', bFrom: 'Breaking Bad / Better Call Saul', hardcore: true },
     { a: 'Game of Thrones', aFrom: 'Westeros (HBO)', b: 'House of the Dragon', bFrom: 'Westeros (HBO)', hardcore: true },
     { a: 'Jon Snow', aFrom: 'Game of Thrones', b: 'Robb Stark', bFrom: 'Game of Thrones' },
@@ -223,7 +283,27 @@ export const WORD_DATA = {
   ],
 
   personnages: [
-    { a: 'Superman', aFrom: 'DC Comics', b: 'Goku', bFrom: 'Dragon Ball', link: 'Surpuissants au grand cœur' },
+    // --- Ajouts : mythes, rôles et ressemblances ---
+    { a: 'Joker', aFrom: 'DC Comics', b: 'Harley Quinn', bFrom: 'DC Comics', link: 'Couple de fous criminels' },
+    { a: 'Batman', aFrom: 'DC Comics', b: 'Daredevil', bFrom: 'Marvel', link: 'Justiciers urbains sans pouvoirs' },
+    { a: 'Spider-Man', aFrom: 'Marvel', b: 'Daredevil', bFrom: 'Marvel', link: 'Agiles aux sens aiguisés' },
+    { a: 'Hercule', aFrom: 'Mythologie grecque', b: 'Samson', bFrom: 'Bible', link: 'Hommes à la force surhumaine' },
+    { a: 'Zeus', aFrom: 'Mythologie grecque', b: 'Odin', bFrom: 'Mythologie nordique', link: 'Rois des dieux' },
+    { a: 'Méduse', aFrom: 'Mythologie grecque', b: 'Basilic', bFrom: 'Légendes', link: 'Leur regard pétrifie ou tue' },
+    { a: 'Cyclope', aFrom: 'Mythologie grecque', b: 'Sauron', bFrom: 'Le Seigneur des Anneaux', link: 'Un seul œil' },
+    { a: 'Hadès', aFrom: 'Mythologie grecque', b: 'Lucifer', bFrom: 'Religion', link: 'Maîtres des enfers' },
+    { a: 'Cthulhu', aFrom: 'Lovecraft', b: 'Le Kraken', bFrom: 'Légendes marines', link: 'Monstres tentaculaires des abysses' },
+    { a: 'Frankenstein', aFrom: 'Mary Shelley', b: 'Hulk', bFrom: 'Marvel', link: 'Colosses incompris et tragiques' },
+    { a: 'Pinocchio', aFrom: 'Collodi', b: 'Astro Boy', bFrom: 'Tezuka', link: "Pantins/robots qui rêvent d'être humains" },
+    { a: 'Superman', aFrom: 'DC Comics', b: 'Captain America', bFrom: 'Marvel', link: 'Symboles patriotiques et droits' },
+    { a: 'Wonder Woman', aFrom: 'DC Comics', b: 'Xena', bFrom: 'Xena la guerrière', link: 'Guerrières en armure antique' },
+    { a: 'Le Père Noël', aFrom: 'Folklore', b: 'Gandalf', bFrom: 'Le Seigneur des Anneaux', link: 'Vieux barbus en longue robe' },
+    { a: 'Dracula', aFrom: 'Bram Stoker', b: 'Edward Cullen', bFrom: 'Twilight', link: 'Vampires séduisants' },
+    { a: 'King Arthur', aFrom: 'Légende arthurienne', b: 'Aragorn', bFrom: 'Le Seigneur des Anneaux', link: "Rois légitimes à l'épée" },
+    { a: 'Hercule Poirot', aFrom: 'Agatha Christie', b: 'Columbo', bFrom: 'Columbo', link: 'Détectives à la fausse nonchalance' },
+    { a: 'Robin des Bois', aFrom: 'Légende anglaise', b: 'Guillaume Tell', bFrom: 'Légende suisse', link: 'Archers légendaires rebelles' },
+    { a: 'Merlin', aFrom: 'Légende arthurienne', b: 'Dumbledore', bFrom: 'Harry Potter', link: 'Vieux sorciers mentors' },
+    { a: 'Captain America', aFrom: 'Marvel', b: 'Wonder Woman', bFrom: 'DC Comics', link: 'Soldats parfaits incarnant des valeurs' },
     { a: 'Superman', aFrom: 'DC Comics', b: 'Homelander', bFrom: 'The Boys', link: 'Surhomme en cape (un bon, un mauvais)' },
     { a: 'Sherlock Holmes', aFrom: 'A. Conan Doyle', b: 'Hercule Poirot', bFrom: 'Agatha Christie', link: 'Détectives à moustache grise' },
     { a: 'Sherlock Holmes', aFrom: 'A. Conan Doyle', b: 'Batman', bFrom: 'DC Comics', link: "Génies de la déduction" },
@@ -252,6 +332,25 @@ export const WORD_DATA = {
   // rivalité. Ton léger, aucune intention de moquerie.
   // ------------------------------------------------------------------
   personnalites: [
+    // Ajouts variés (sport, musique, ciné, tech, histoire)
+    { a: 'Messi', b: 'Maradona', link: 'Génies argentins du ballon rond' },
+    { a: 'Kobe Bryant', b: 'Michael Jordan', link: 'Légendes de la NBA' },
+    { a: 'Serena Williams', b: 'Steffi Graf', link: 'Reines du tennis' },
+    { a: 'Lewis Hamilton', b: 'Michael Schumacher', link: 'Recordmen de la Formule 1' },
+    { a: 'Tiger Woods', b: 'Rory McIlroy', link: 'Stars du golf' },
+    { a: 'Lady Gaga', b: 'Madonna', link: 'Reines de la pop provocatrices' },
+    { a: 'Bruno Mars', b: 'Michael Jackson', link: 'Showmen de la pop rétro' },
+    { a: 'Kanye West', b: 'Jay-Z', link: 'Rappeurs moguls américains' },
+    { a: 'Daft Punk', b: 'David Guetta', link: 'DJ français mondialement connus' },
+    { a: 'Angèle', b: 'Aya Nakamura', link: 'Chanteuses pop francophones' },
+    { a: 'Brad Pitt', b: 'George Clooney', link: "Beaux gosses d'Hollywood" },
+    { a: 'Dwayne Johnson', b: 'Jason Statham', link: "Costauds des films d'action" },
+    { a: 'Morgan Freeman', b: 'Samuel L. Jackson', link: 'Voix graves légendaires du cinéma' },
+    { a: 'Steve Jobs', b: 'Steve Wozniak', link: "Les deux Steve fondateurs d'Apple" },
+    { a: 'MrBeast', b: 'PewDiePie', link: 'Plus grands youtubeurs du monde' },
+    { a: 'Léonard de Vinci', b: 'Michel-Ange', link: 'Génies de la Renaissance' },
+    { a: 'Napoléon', b: 'Jules César', link: 'Grands conquérants militaires' },
+    { a: 'Usain Bolt', b: 'Mbappé', link: 'Connus pour leur vitesse fulgurante' },
     // Sport
     { a: 'Messi', b: 'Cristiano Ronaldo', link: 'Rivaux légendaires du foot' },
     { a: 'Mbappé', b: 'Haaland', link: 'Jeunes stars du foot' },
@@ -305,6 +404,23 @@ export const WORD_DATA = {
   // (Pas d'« univers » : tout vient de Pokémon. On se base sur la forme.)
   // ------------------------------------------------------------------
   pokemon: [
+    // Ajouts : évolutions, ÉEVEElutions, starters et ressemblances
+    { a: 'Herbizarre', b: 'Florizarre', link: 'Évolution', hardcore: true },
+    { a: 'Carabaffe', b: 'Tortank', link: 'Évolution' },
+    { a: 'Évoli', b: 'Pyroli', link: 'Évolution' },
+    { a: 'Évoli', b: 'Voltali', link: 'Évolution' },
+    { a: 'Pyroli', b: 'Voltali', link: 'Éeveelutions élémentaires', hardcore: true },
+    { a: 'Mélodelfe', b: 'Mélofée', link: 'Évolution', hardcore: true },
+    { a: 'Taupiqueur', b: 'Triopikeur', link: 'Évolution', hardcore: true },
+    { a: 'Nosferapti', b: 'Nosferalto', link: 'Évolution', hardcore: true },
+    { a: 'Férosinge', b: 'Colossinge', link: 'Évolution', hardcore: true },
+    { a: 'Ramoloss', b: 'Flagadoss', link: 'Évolution', hardcore: true },
+    { a: 'Rondoudou', b: 'Grodoudou', link: 'Évolution' },
+    { a: 'Bulbizarre', b: 'Salamèche', link: 'Starters de Kanto' },
+    { a: 'Salamèche', b: 'Carapuce', link: 'Starters de Kanto' },
+    { a: 'Mew', b: 'Celebi', link: 'Petits légendaires mythiques' },
+    { a: 'Dracaufeu', b: 'Léviator', link: 'Pseudo-dragons intimidants' },
+    { a: 'Caninos', b: 'Ponyta', link: 'Pokémon de feu à quatre pattes' },
     // Évolutions (très proches)
     { a: 'Pichu', b: 'Pikachu', link: 'Bébé et évolution', hardcore: true },
     { a: 'Pikachu', b: 'Raichu', link: 'Évolution', hardcore: true },
@@ -354,6 +470,21 @@ export const WORD_DATA = {
   // du jeu (régions, objectifs, sorts, rangs...).
   // ------------------------------------------------------------------
   lol: [
+    // Ajouts : champions par rôle/ressemblance + éléments du jeu
+    { a: 'Lux', b: 'Lucian', link: 'Tirent des rayons de lumière' },
+    { a: 'Annie', b: 'Lulu', link: 'Petites mages avec un familier' },
+    { a: 'Akali', b: 'Zed', link: 'Assassins ninjas ioniens' },
+    { a: 'Riven', b: 'Yasuo', link: 'Épéistes rongés par la culpabilité' },
+    { a: 'Thresh', b: 'Blitzcrank', link: 'Attrapent leur cible avec un crochet' },
+    { a: 'Blitzcrank', b: 'Nautilus', link: 'Tirent leur cible vers eux' },
+    { a: 'Malphite', b: 'Galio', link: 'Colosses qui sautent sur le groupe' },
+    { a: 'Sona', b: 'Seraphine', link: 'Supports musiciennes' },
+    { a: 'Katarina', b: 'Talon', link: 'Assassins de Noxus à la lame' },
+    { a: 'Vladimir', b: 'Swain', link: 'Mages de Noxus qui drainent la vie' },
+    { a: 'Maokai', b: 'Ivern', link: 'Champions arbres' },
+    { a: 'Twitch', b: 'Singed', link: 'Champions de Zaun qui empoisonnent' },
+    { a: 'Top', b: 'Jungle', link: "Rôles sur la Faille de l'invocateur" },
+    { a: 'Tourelle', b: 'Inhibiteur', link: 'Structures défensives à détruire' },
     // Champions
     { a: 'Garen', b: 'Darius', link: 'Bruisers top : Demacia contre Noxus' },
     { a: 'Yasuo', b: 'Yone', link: 'Frères bretteurs', hardcore: true },
